@@ -59,13 +59,14 @@ public class IsometricPlayerController3D : MonoBehaviour
             isoNorm = isometricInput.normalized;
             rb.velocity = isoNorm * moveSpeed + rb.velocity.y * Vector3.up;
 
-            if(isometricInput.sqrMagnitude > 0)
-                lastFacing = isoNorm.normalized;
-            else 
-                isoLookAngle = Vector3.SignedAngle(modelTransform.forward, isoNorm, Vector3.up);
+            if (isometricInput != Vector3.zero)
+            {
+                lastFacing = isoNorm;
+                isoLookAngle = Vector3.SignedAngle(modelTransform.forward, lastFacing, Vector3.up);
 
-            if (Mathf.Abs(isoLookAngle) > 2f) modelTransform.Rotate(Vector3.up, isoLookAngle * modelRotateMultiplier * Time.deltaTime);
-            else modelTransform.rotation = Quaternion.LookRotation(lastFacing, Vector3.up);
+                if (Mathf.Abs(isoLookAngle) > 2f) modelTransform.Rotate(modelTransform.up, isoLookAngle * modelRotateMultiplier * Time.deltaTime);
+                else modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
+            }
 
             if(Input.GetKeyDown(KeyCode.LeftShift) && dashCD <= 0f)
             {
@@ -79,6 +80,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     IEnumerator Dash()
     {
         float dt = dashTime;
+        modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
         while (dt > 0)
         {
             rb.velocity = lastFacing.normalized * dashSpeed;
@@ -94,5 +96,10 @@ public class IsometricPlayerController3D : MonoBehaviour
     {
         StopCoroutine(state);
         state = StartCoroutine(next);
+    }
+
+    IEnumerator Attack()
+    {
+        yield return null;
     }
 }
