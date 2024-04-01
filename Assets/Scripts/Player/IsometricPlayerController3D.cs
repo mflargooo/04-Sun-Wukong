@@ -4,16 +4,30 @@ using UnityEngine;
 
 public class IsometricPlayerController3D : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private Animator anim;
     private Rigidbody rb;
+
+    [Header("Controls")]
+    [SerializeField] private PlayerInputs keybinds;
+
+    [Header("Model")]
     [SerializeField] private Transform modelTransform;
     [SerializeField] private float modelRotateMultiplier;
 
+    [Header("Player Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashTime;
     [SerializeField] private float dashCooldown;
-
     private float dashCD;
+
+    [Header("Attack")]
+    [SerializeField] private float attackMovePercent;
+    [SerializeField] private AnimationClip[] attacks;
+    private const int MAX_COMBO = 3;
+    private int attackType = 0;
+    
 
     public Vector3 input { get; private set; }
     public Vector3 isometricInput { get; private set; }
@@ -68,9 +82,14 @@ public class IsometricPlayerController3D : MonoBehaviour
                 else modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
             }
 
-            if(Input.GetKeyDown(KeyCode.LeftShift) && dashCD <= 0f)
+            if(Input.GetKeyDown(keybinds.dash) && dashCD <= 0f)
             {
                 NextState(Dash());
+            }
+            
+            if (Input.GetKeyDown(keybinds.attack))
+            {
+                NextState(Attack(0));
             }
 
             yield return null;
@@ -83,6 +102,11 @@ public class IsometricPlayerController3D : MonoBehaviour
         modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
         while (dt > 0)
         {
+            if (Input.GetKeyDown(keybinds.attack))
+            {
+                NextState(Attack(0));
+            }
+
             rb.velocity = lastFacing.normalized * dashSpeed;
             dt -= Time.deltaTime;
             yield return null;
@@ -92,14 +116,70 @@ public class IsometricPlayerController3D : MonoBehaviour
         NextState(Movement());
     }
 
+    IEnumerator Attack(int combo)
+    {
+        rb.velocity = Vector3.zero;
+
+        bool nextCombo = false;
+        bool smoothRestart = false;
+
+        float attackTime = attacks[combo].length;
+        float refAttackTime = attacks[combo].length;
+
+        anim.SetInteger("AttackType", combo);
+
+        while (attackTime > 0)
+        {
+            switch (combo)
+            {
+                case 0:
+                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+            }
+
+            if (Input.GetKeyDown(keybinds.attack) && combo < MAX_COMBO - 1)
+            {
+
+                if (!nextCombo && attackTime <= refAttackTime * .1f)
+                {
+                    smoothRestart = true;
+                }
+                else if (attackTime <= refAttackTime * .75f)
+                {
+                    nextCombo = true;
+                }
+            }
+
+            attackTime -= Time.deltaTime;
+            yield return null;
+        }
+            
+
+        if (nextCombo)
+        {
+            NextState(Attack(combo + 1));
+        }
+        else if (smoothRestart)
+        {
+            NextState(Attack(0));
+        }
+        else
+        {
+            anim.SetInteger("AttackType", -1);
+            NextState(Movement());
+        }
+
+        yield return null;
+    }
+
     void NextState(IEnumerator next)
     {
         StopCoroutine(state);
         state = StartCoroutine(next);
     }
-
-    IEnumerator Attack()
-    {
-        yield return null;
-    }
 }
+
