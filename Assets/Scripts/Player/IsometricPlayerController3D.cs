@@ -52,7 +52,6 @@ public class IsometricPlayerController3D : MonoBehaviour
         isoNorm = Vector3.forward;
 
         state = StartCoroutine(Movement());
-
     }
     // Update is called once per frame
     void Update()

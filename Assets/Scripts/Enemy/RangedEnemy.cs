@@ -1,23 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RangedEnemy : Enemy
 {
     [SerializeField] private Projectile projectile;
-    // Start is called before the first frame update
 
-    Vector3 homePos;
-
-    void Start()
+    public override void Start()
     {
-        homePos = transform.position;
-        StartCoroutine(Wander())
+        base.Start();
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        
+        base.Update();
     }
 }
