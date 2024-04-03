@@ -8,4 +8,9 @@ public class PlayerSounds : MonoBehaviour
     {
         SoundManager.PlayFootstep();
     }
+
+    public void PlayPlayerHit()
+    {
+        SoundManager.PlayPlayerHit();
+    }
 }

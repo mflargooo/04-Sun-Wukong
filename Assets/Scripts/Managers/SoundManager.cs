@@ -11,6 +11,11 @@ public class SoundManager : MonoBehaviour
     private static AudioClip[] ftsps;
     private static AudioSource ftspsSrc;
 
+    [SerializeField] private AudioClip[] playerHits;
+    [SerializeField] private AudioSource playerHitsSource;
+    private static AudioClip[] phs;
+    private static AudioSource phsSrc;
+
     private void Start()
     {
         if (!instance)
@@ -20,9 +25,16 @@ public class SoundManager : MonoBehaviour
 
         ftsps = footsteps;
         ftspsSrc = footstepsSource;
+        phs = playerHits;
+        phsSrc = playerHitsSource;
     }
     public static void PlayFootstep()
     {
         ftspsSrc.PlayOneShot(ftsps[Random.Range(0, ftsps.Length)]);
+    }
+
+    public static void PlayPlayerHit()
+    {
+        phsSrc.PlayOneShot(phs[Random.Range(0, phs.Length)]);
     }
 }
