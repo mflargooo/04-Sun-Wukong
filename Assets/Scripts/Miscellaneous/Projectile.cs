@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private float damage;
+    [SerializeField] protected LayerMask destroyOnContact;
+    [SerializeField] protected LayerMask damageOnContact;
+    public virtual void Launch(Vector3 launchVector) { }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (((1 << other.gameObject.layer) & damageOnContact) != 0)
+        {
+            other.GetComponent<IDamageable>().Damage(damage);
+        }
+
+        if (((1 << other.gameObject.layer) & destroyOnContact) != 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected float aggroRange;
     [SerializeField] protected float relieveAggroTime;
     [SerializeField] protected float attackRange;
-    [SerializeField] private float attackSpeed;
+    [SerializeField] protected float attackSpeed;
 
     private bool playerLastSeen;
 
@@ -35,6 +35,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected Vector3 homePos;
     protected Coroutine state;
+    private Coroutine isAttacking;
+
     public virtual void Start()
     {
         health = maxHealth;
@@ -106,7 +108,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected IEnumerator Aggro()
     {
         float rat = relieveAggroTime;
-
+        float lockOnAngle = 0f;
         while (true)
         {
             if (!isLOS)
@@ -124,6 +126,7 @@ public class Enemy : MonoBehaviour, IDamageable
             {
                 playerLastSeen = false;
                 rat = relieveAggroTime;
+                lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
                 if (enemyToPlayer.sqrMagnitude > attackRange * attackRange)
                 {
@@ -137,14 +140,23 @@ public class Enemy : MonoBehaviour, IDamageable
                     {
                         agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - maintainDistRange));
                         agent.updateRotation = false;
-                        transform.rotation = Quaternion.LookRotation(enemyToPlayer.normalized, Vector3.up);
+
+                        if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+
                         agent.speed = relocateSpeed;
+                        if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
                     }
                     else
                     {
-                        agent.updateRotation = true;
-                        transform.rotation = Quaternion.LookRotation(enemyToPlayer.normalized, Vector3.up);
+                        agent.updateRotation = false;
+
+                        if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+
                         agent.SetDestination(transform.position);
+
+                        if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
                     }
                 }
             }
@@ -158,8 +170,14 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected virtual IEnumerator Attack()
     {
-        Debug.Log("Attack");
         yield return new WaitForSeconds(attackSpeed);
+        EndAttack();
+    }
+
+    protected void EndAttack()
+    {
+        StopCoroutine(isAttacking);
+        isAttacking = null;
     }
 
     private void OnDrawGizmos()
