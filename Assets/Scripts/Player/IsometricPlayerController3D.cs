@@ -117,6 +117,7 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator Attack(int combo)
     {
+        Debug.Log(combo);
         rb.velocity = Vector3.zero;
 
         bool nextCombo = false;
