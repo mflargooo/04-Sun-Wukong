@@ -11,13 +11,13 @@ public class RangedEnemy : Enemy
 
     private Projectile proj;
 
-    public override void Start()
+    protected override void Start()
     {
         base.Start();
     }
 
     // Update is called once per frame
-    public override void Update()
+    protected override void Update()
     {
         base.Update();
     }

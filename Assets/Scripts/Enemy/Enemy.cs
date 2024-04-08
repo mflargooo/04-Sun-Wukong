@@ -5,8 +5,11 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
+    [Header("Components")]
     [SerializeField] private NavMeshAgent agent;
     protected IsometricPlayerController3D player;
+    protected Animator anim;
+
     protected RaycastHit hit;
     protected bool isLOS;
 
@@ -37,7 +40,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected Coroutine state;
     private Coroutine isAttacking;
 
-    public virtual void Start()
+    protected virtual void Start()
     {
         health = maxHealth;
         player = FindObjectOfType<IsometricPlayerController3D>();
@@ -46,7 +49,7 @@ public class Enemy : MonoBehaviour, IDamageable
         state = StartCoroutine(Wander());
     }
 
-    public virtual void Update()
+    protected virtual void Update()
     {
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         
