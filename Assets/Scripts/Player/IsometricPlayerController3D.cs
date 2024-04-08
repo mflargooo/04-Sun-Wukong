@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using TMPro;
+
 public class IsometricPlayerController3D : MonoBehaviour
 {
     [Header("Components")]
@@ -27,6 +29,9 @@ public class IsometricPlayerController3D : MonoBehaviour
     [SerializeField] private AnimationClip[] attacks;
     private const int MAX_COMBO = 3;
     private int attackType = 0;
+
+    [Header("Temp for Debug")]
+    [SerializeField] private TMP_Text comboText;
     
 
     public Vector3 input { get; private set; }
@@ -67,6 +72,7 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator Movement()
     {
+        comboText.text = "Combo: 0";
         while (true)
         {
             isoNorm = isometricInput.normalized;
@@ -117,7 +123,7 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator Attack(int combo)
     {
-        Debug.Log(combo);
+        comboText.text = "Combo: " + (combo + 1).ToString();
         rb.velocity = Vector3.zero;
 
         bool nextCombo = false;
