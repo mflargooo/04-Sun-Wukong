@@ -28,11 +28,11 @@ public class IsometricPlayerController3D : MonoBehaviour
     [SerializeField] private float attackMovePercent;
     [SerializeField] private AnimationClip[] attacks;
     private const int MAX_COMBO = 3;
-    private int attackType = 0;
 
     [Header("Temp for Debug")]
     [SerializeField] private TMP_Text comboText;
-    
+
+    private Ray mouseRay;
 
     public Vector3 input { get; private set; }
     public Vector3 isometricInput { get; private set; }
@@ -43,6 +43,8 @@ public class IsometricPlayerController3D : MonoBehaviour
     float isoLookAngle;
     Vector3 isoNorm;
 
+    private float scaleRayToFloor;
+    Vector3 mouseToFloorPos;
 
     private Coroutine state;
     // Start is called before the first frame update
@@ -61,10 +63,15 @@ public class IsometricPlayerController3D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        scaleRayToFloor = -mouseRay.origin.y / mouseRay.direction.y;
+        mouseToFloorPos = mouseRay.origin + mouseRay.direction * scaleRayToFloor;
+
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
         isometricInput = new Vector3(input.x * cosInputRot - input.z * sinInputRot, 0f, input.z * cosInputRot + input.x * sinInputRot);
 
-        if(dashCD > 0)
+        if (dashCD > 0)
         {
             dashCD -= Time.deltaTime;
         }
@@ -87,16 +94,18 @@ public class IsometricPlayerController3D : MonoBehaviour
                 else modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
             }
 
-            if(Input.GetKeyDown(keybinds.dash) && dashCD <= 0f)
+            if (Input.GetKeyDown(keybinds.dash) && dashCD <= 0f)
             {
                 NextState(Dash());
             }
-            
+
             if (Input.GetKeyDown(keybinds.attack))
             {
+                anim.SetFloat("MoveSpeed", 0f);
                 NextState(Attack(0));
             }
 
+            anim.SetFloat("MoveSpeed", rb.velocity.magnitude);
             yield return null;
         }
     }
@@ -121,6 +130,18 @@ public class IsometricPlayerController3D : MonoBehaviour
         NextState(Movement());
     }
 
+    IEnumerator RotateTowardsTarget(Vector3 vector)
+    {
+        float isoLookAngle = 360f;
+        while ((isoLookAngle = Vector3.SignedAngle(modelTransform.forward, lastFacing, Vector3.up)) > 2f)
+        {
+            modelTransform.Rotate(modelTransform.up, isoLookAngle * modelRotateMultiplier * Time.deltaTime);
+            yield return null;
+        }
+
+        modelTransform.rotation = Quaternion.LookRotation(vector, modelTransform.up);
+    }
+
     IEnumerator Attack(int combo)
     {
         comboText.text = "Combo: " + (combo + 1).ToString();
@@ -131,8 +152,10 @@ public class IsometricPlayerController3D : MonoBehaviour
 
         float attackTime = attacks[combo].length;
         float refAttackTime = attacks[combo].length;
+    
+        anim.Play("attack_" + combo.ToString());
 
-        anim.SetInteger("AttackType", combo);
+        StartCoroutine(RotateTowardsTarget(new Vector3(mouseToFloorPos.x - transform.position.x, 0f, mouseToFloorPos.z - transform.position.z)));
 
         while (attackTime > 0)
         {
@@ -142,6 +165,7 @@ public class IsometricPlayerController3D : MonoBehaviour
                     rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent;
                     break;
                 case 1:
+                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent;
                     break;
                 case 2:
                     break;
@@ -154,7 +178,7 @@ public class IsometricPlayerController3D : MonoBehaviour
                 {
                     smoothRestart = true;
                 }
-                else if (attackTime <= refAttackTime * .75f)
+                else
                 {
                     nextCombo = true;
                 }

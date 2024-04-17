@@ -32,6 +32,9 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected float attackRange;
     [SerializeField] protected float attackSpeed;
 
+    [Header("ID")]
+    private string id;
+
     private bool playerLastSeen;
 
     protected float health;
@@ -169,6 +172,11 @@ public class Enemy : MonoBehaviour, IDamageable
 
             yield return null;
         }
+    }
+
+    private void OnDestroy()
+    {
+        FindObjectOfType<SpawnManager>().RemoveEnemy(id);
     }
 
     protected virtual IEnumerator Attack()

@@ -11,10 +11,15 @@ public class SoundManager : MonoBehaviour
     private static AudioClip[] ftsps;
     private static AudioSource ftspsSrc;
 
-    [SerializeField] private AudioClip[] playerHits;
-    [SerializeField] private AudioSource playerHitsSource;
-    private static AudioClip[] phs;
-    private static AudioSource phsSrc;
+    [SerializeField] private AudioClip[] playerSwings;
+    [SerializeField] private AudioSource playerSwingsSource;
+    private static AudioClip[] pss;
+    private static AudioSource pssSrc;
+
+    [SerializeField] private AudioClip[] connectedAttacks;
+    [SerializeField] private AudioSource connectedAttackSource;
+    private static AudioClip[] cas;
+    private static AudioSource caSrc;
 
     private void Start()
     {
@@ -25,16 +30,22 @@ public class SoundManager : MonoBehaviour
 
         ftsps = footsteps;
         ftspsSrc = footstepsSource;
-        phs = playerHits;
-        phsSrc = playerHitsSource;
+        pss = playerSwings;
+        pssSrc = playerSwingsSource;
+        cas = connectedAttacks;
+        caSrc = connectedAttackSource;
     }
     public static void PlayFootstep()
     {
         ftspsSrc.PlayOneShot(ftsps[Random.Range(0, ftsps.Length)]);
     }
 
-    public static void PlayPlayerHit()
+    public static void PlayPlayerSwing()
     {
-        phsSrc.PlayOneShot(phs[Random.Range(0, phs.Length)]);
+        pssSrc.PlayOneShot(pss[Random.Range(0, pss.Length)]);
+    }
+    public static void PlayConnectedAttack()
+    {
+        caSrc.PlayOneShot(cas[Random.Range(0, cas.Length)]);
     }
 }
