@@ -22,16 +22,26 @@ public class RangedEnemy : Enemy
         base.Update();
     }
 
-    protected override IEnumerator Attack()
+    public void SpawnProjectile()
     {
-        proj = Instantiate(projectilePrefab, projSpawnLoc.position, projSpawnLoc.rotation);
+        Vector3 centralize = Vector3.Cross(transform.forward, transform.up).normalized;
+        proj = Instantiate(projectilePrefab, projSpawnLoc.position + centralize * .25f - transform.up * .5f, transform.rotation);
         proj.Launch(proj.transform.forward);
 
         if (proj.TryGetComponent<AccelerateTowards>(out AccelerateTowards accelTowards))
         {
             accelTowards.SetTarget(player.transform);
         }
+    }
 
+    public override void DoAttack()
+    {
+        SpawnProjectile();
+    }
+
+    protected override IEnumerator Attack()
+    {
+        anim.Play("attack");
         yield return new WaitForSeconds(attackSpeed);
         EndAttack();
     }

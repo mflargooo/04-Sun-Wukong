@@ -1543,6 +1543,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 7631897327131564668}
+  anim: {fileID: 2569936020746195406}
   maxHealth: 5
   wanderRadius: 1
   wanderSpeed: 2

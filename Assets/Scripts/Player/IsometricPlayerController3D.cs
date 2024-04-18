@@ -29,9 +29,6 @@ public class IsometricPlayerController3D : MonoBehaviour
     [SerializeField] private AnimationClip[] attacks;
     private const int MAX_COMBO = 3;
 
-    [Header("Temp for Debug")]
-    [SerializeField] private TMP_Text comboText;
-
     private Ray mouseRay;
 
     public Vector3 input { get; private set; }
@@ -65,7 +62,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     {
         mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        scaleRayToFloor = -mouseRay.origin.y / mouseRay.direction.y;
+        scaleRayToFloor = (1f - mouseRay.origin.y)  / mouseRay.direction.y;
         mouseToFloorPos = mouseRay.origin + mouseRay.direction * scaleRayToFloor;
 
         input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
@@ -79,7 +76,6 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator Movement()
     {
-        comboText.text = "Combo: 0";
         while (true)
         {
             isoNorm = isometricInput.normalized;
@@ -132,8 +128,8 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator RotateTowardsTarget(Vector3 vector)
     {
-        float isoLookAngle = 360f;
-        while ((isoLookAngle = Vector3.SignedAngle(modelTransform.forward, lastFacing, Vector3.up)) > 2f)
+        float isoLookAngle = 3f;
+        while ((isoLookAngle = Vector3.SignedAngle(modelTransform.forward, vector, Vector3.up)) > 2f)
         {
             modelTransform.Rotate(modelTransform.up, isoLookAngle * modelRotateMultiplier * Time.deltaTime);
             yield return null;
@@ -144,7 +140,6 @@ public class IsometricPlayerController3D : MonoBehaviour
 
     IEnumerator Attack(int combo)
     {
-        comboText.text = "Combo: " + (combo + 1).ToString();
         rb.velocity = Vector3.zero;
 
         bool nextCombo = false;
@@ -154,31 +149,32 @@ public class IsometricPlayerController3D : MonoBehaviour
         float refAttackTime = attacks[combo].length;
     
         anim.Play("attack_" + combo.ToString());
-
-        StartCoroutine(RotateTowardsTarget(new Vector3(mouseToFloorPos.x - transform.position.x, 0f, mouseToFloorPos.z - transform.position.z)));
+        Vector3 playerToMouseFloor = new Vector3(mouseToFloorPos.x - transform.position.x, 0f, mouseToFloorPos.z - transform.position.z).normalized;
+        StartCoroutine(RotateTowardsTarget(playerToMouseFloor));
 
         while (attackTime > 0)
         {
             switch (combo)
             {
                 case 0:
-                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent;
+                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent + playerToMouseFloor * moveSpeed * attackMovePercent;
                     break;
                 case 1:
-                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent;
+                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent + playerToMouseFloor * moveSpeed * attackMovePercent;
                     break;
                 case 2:
+                    rb.velocity = isometricInput.normalized * moveSpeed * attackMovePercent + playerToMouseFloor * moveSpeed * attackMovePercent * 3f;
                     break;
             }
 
             if (Input.GetKeyDown(keybinds.attack) && combo < MAX_COMBO - 1)
             {
 
-                if (!nextCombo && attackTime <= refAttackTime * .1f)
+                if (!nextCombo && attackTime <= refAttackTime * .2f)
                 {
                     smoothRestart = true;
                 }
-                else
+                else if (attackTime <= .999f * refAttackTime)
                 {
                     nextCombo = true;
                 }
@@ -187,6 +183,8 @@ public class IsometricPlayerController3D : MonoBehaviour
             attackTime -= Time.deltaTime;
             yield return null;
         }
+
+        rb.velocity = Vector3.zero;
             
 
         if (nextCombo)
@@ -200,6 +198,10 @@ public class IsometricPlayerController3D : MonoBehaviour
         else
         {
             anim.SetInteger("AttackType", -1);
+            if (combo == MAX_COMBO - 1)
+            {
+                yield return new WaitForSeconds(.2f);
+            }
             NextState(Movement());
         }
 

@@ -8,7 +8,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Components")]
     [SerializeField] private NavMeshAgent agent;
     protected IsometricPlayerController3D player;
-    protected Animator anim;
+    [SerializeField] protected Animator anim;
 
     protected RaycastHit hit;
     protected bool isLOS;
@@ -179,13 +179,18 @@ public class Enemy : MonoBehaviour, IDamageable
         FindObjectOfType<SpawnManager>().RemoveEnemy(id);
     }
 
+    public virtual void DoAttack()
+    {
+        return;
+    }
+
     protected virtual IEnumerator Attack()
     {
         yield return new WaitForSeconds(attackSpeed);
         EndAttack();
     }
 
-    protected void EndAttack()
+    public virtual void EndAttack()
     {
         StopCoroutine(isAttacking);
         isAttacking = null;
