@@ -15,27 +15,18 @@ public class Nezha : MonoBehaviour, IDamageable
 
     [SerializeField] protected float maxHealth;
 
-    [SerializeField]
-    private AnimationClip[] meleeAttacks;
+    [SerializeField] private AnimationClip[] meleeAttacks;
+    [SerializeField] private AnimationClip throwProjectile;
+    [SerializeField] private NezhaProjectile throwProjectilePrefab;
+    [SerializeField] private Transform spawnProjLoc;
 
-    [Header("Phase 1")]
-    [SerializeField] private float p1ChaseSpeed;
-    [SerializeField] protected float p1MeleeAttackRange;
-    [SerializeField] protected float p1AttackCooldownFromMelee;
+    [SerializeField] private GameObject normalBoomerang;
+    [SerializeField] private GameObject pulsingBoomerang;
 
-    [Header("Phase 2")]
-    [SerializeField] private float p2ChaseSpeed;
-    [SerializeField] protected float p2MeleeAttackRange;
-    [SerializeField] protected float p2RangeAttackRange;
-    [SerializeField] protected float p2AttackCooldownFromMelee;
-    [SerializeField] protected float p2AttackCooldownFromRange;
-
-    [Header("Phase 3")]
-    [SerializeField] private float p3ChaseSpeed;
-    [SerializeField] protected float p3MeleeAttackRange;
-    [SerializeField] protected float p3RangeAttackRange;
-    [SerializeField] protected float p3AttackCooldownFromMelee;
-    [SerializeField] protected float p3AttackCooldownFromRange;
+    [SerializeField] private float chaseSpeed;
+    [SerializeField] protected float meleeAttackRange;
+    [SerializeField] protected float attackCooldownFromMelee;
+    [SerializeField] protected float attackCooldownFromRange;
 
     protected float health;
 
@@ -93,7 +84,7 @@ public class Nezha : MonoBehaviour, IDamageable
         print("STARTING PHASE ONE");
 
         float lockOnAngle = 0f;
-        agent.speed = p1ChaseSpeed;
+        agent.speed = chaseSpeed;
         while (true)
         {
             if (health / maxHealth <= .75f)
@@ -103,7 +94,7 @@ public class Nezha : MonoBehaviour, IDamageable
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
             agent.SetDestination(player.transform.position);
-            if (enemyToPlayer.magnitude > p1MeleeAttackRange)
+            if (enemyToPlayer.magnitude > meleeAttackRange)
             {
                 agent.updateRotation = true;
             }
@@ -114,10 +105,10 @@ public class Nezha : MonoBehaviour, IDamageable
                 else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
             }
 
-            if (isAttacking == null && lockOnAngle < .2f && enemyToPlayer.magnitude <= p1MeleeAttackRange && canAttack)
+            if (isAttacking == null && lockOnAngle < .2f && enemyToPlayer.magnitude <= meleeAttackRange && canAttack)
             {
                 agent.SetDestination(transform.position);
-                isAttacking = StartCoroutine(Attack(p1AttackCooldownFromMelee, 0, 1));
+                isAttacking = StartCoroutine(Attack(attackCooldownFromMelee, 0, 1));
             }
 
             yield return isAttacking;
@@ -126,16 +117,38 @@ public class Nezha : MonoBehaviour, IDamageable
 
     private IEnumerator PhaseTwo()
     {
+        agent.enabled = true;
         print("STARTING PHASE TWO");
 
-        agent.speed = p2ChaseSpeed;
-        while(true)
+        float lockOnAngle = 0f;
+        agent.speed = chaseSpeed;
+        while (true)
         {
             if (health / maxHealth <= .5f)
             {
                 NextState(PhaseThree());
             }
-            yield return null;
+            lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
+
+            agent.SetDestination(player.transform.position);
+            if (enemyToPlayer.magnitude > meleeAttackRange)
+            {
+                agent.updateRotation = true;
+            }
+            else
+            {
+                agent.updateRotation = false;
+                if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
+                else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+            }
+
+            if (isAttacking == null && lockOnAngle < .2f && enemyToPlayer.magnitude <= meleeAttackRange && canAttack)
+            {
+                agent.SetDestination(transform.position);
+                isAttacking = StartCoroutine(Attack(attackCooldownFromMelee, 0, 1));
+            }
+
+            yield return isAttacking;
         }
     }
 
@@ -143,7 +156,7 @@ public class Nezha : MonoBehaviour, IDamageable
     {
         print("STARTING PHASE THREE");
 
-        agent.speed = p2ChaseSpeed;
+        agent.speed = chaseSpeed;
         while (true)
         {
             yield return null;
@@ -172,10 +185,14 @@ public class Nezha : MonoBehaviour, IDamageable
             case 1:
                 agent.enabled = false;
                 if (phase == 1)
+                {
                     anim.Play("throw_normal_proj");
-                else 
-                    anim.Play("throw_enhanced_proj")
-                yield return new WaitForSeconds(throwNormProj);
+                }
+                else
+                {
+                    anim.Play("throw_enhanced_proj");
+                }
+                yield return new WaitForSeconds(throwProjectile.length * 1.1f);
                 break;
             case 2:
                 break;
@@ -183,8 +200,13 @@ public class Nezha : MonoBehaviour, IDamageable
 
         agent.enabled = true;
         StartCoroutine(DoAttackCooldown(attackSpeed));
-        yield return new WaitForSeconds(attackSpeed);
         EndAttack();
+    }
+
+    private void SummonProjectile(int type)
+    {
+        NezhaProjectile proj = Instantiate(throwProjectilePrefab, spawnProjLoc.position, throwProjectilePrefab.transform.rotation);
+        proj.BoomerangTo(spawnProjLoc, player.transform.position + Vector3.up * (spawnProjLoc.position.y - player.transform.position.y), type);
     }
 
     IEnumerator DoAttackCooldown(float attackSpeed)
