@@ -10,13 +10,8 @@ public class NezhaProjectile : MonoBehaviour
     [SerializeField] private AnimationClip pulseAnim;
     [SerializeField] private float rotateVelocity;
     [SerializeField] private uint numPulses;
+    [SerializeField] private float boomerangSpeed;
 
-    Vector2 GetEllipseFromPoles(Vector2 p1, Vector2 p2)
-    {
-        Vector2 sum = p2 + p1;
-        Vector2 midpoint = sum / 2;
-        float b2 = (p1 - midpoint).sqrMagnitude;
-    }
     private void Update()
     {
         model.transform.Rotate(Vector3.up * rotateVelocity * Time.deltaTime);
@@ -29,6 +24,22 @@ public class NezhaProjectile : MonoBehaviour
 
     IEnumerator Boomerang(Transform returnLoc, Vector3 targetPos, int type)
     {
+        Vector3 diff = Vector3.zero;
+        while ((diff = targetPos - transform.position).sqrMagnitude > .01f)
+        {
+            transform.position += diff.normalized * boomerangSpeed * Time.deltaTime;
+            yield return null;
+        }
+        if (type == 1)
+        {
+            yield return StartCoroutine(Pulse());
+        }
+        while((diff = returnLoc.position - transform.position).sqrMagnitude > .01f)
+        {
+            transform.position += diff.normalized * boomerangSpeed * Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
         yield return null;
     }
 

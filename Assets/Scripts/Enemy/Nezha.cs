@@ -25,6 +25,7 @@ public class Nezha : MonoBehaviour, IDamageable
 
     [SerializeField] private float chaseSpeed;
     [SerializeField] protected float meleeAttackRange;
+    [SerializeField] protected float rangedAttackRange;
     [SerializeField] protected float attackCooldownFromMelee;
     [SerializeField] protected float attackCooldownFromRange;
 
@@ -142,10 +143,18 @@ public class Nezha : MonoBehaviour, IDamageable
                 else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
             }
 
-            if (isAttacking == null && lockOnAngle < .2f && enemyToPlayer.magnitude <= meleeAttackRange && canAttack)
+            if (isAttacking == null && lockOnAngle < .2f && canAttack)
             {
-                agent.SetDestination(transform.position);
-                isAttacking = StartCoroutine(Attack(attackCooldownFromMelee, 0, 1));
+                if (enemyToPlayer.magnitude <= meleeAttackRange)
+                {
+                    agent.SetDestination(transform.position);
+                    isAttacking = StartCoroutine(Attack(attackCooldownFromMelee, 0, 1));
+                }
+                else if(enemyToPlayer.magnitude <= rangedAttackRange)
+                {
+                    agent.SetDestination(transform.position);
+                    isAttacking = StartCoroutine(Attack(attackCooldownFromRange, 1, 1));
+                }
             }
 
             yield return isAttacking;
@@ -167,7 +176,7 @@ public class Nezha : MonoBehaviour, IDamageable
     /* Phases are 1-indexed */
     private IEnumerator Attack(float attackSpeed, int type, int phase)
     {
-        canAttack = true;
+        canAttack = false;
         switch (type)
         {
             case 0:
@@ -184,6 +193,7 @@ public class Nezha : MonoBehaviour, IDamageable
                 break;
             case 1:
                 agent.enabled = false;
+                /*
                 if (phase == 1)
                 {
                     anim.Play("throw_normal_proj");
@@ -191,8 +201,9 @@ public class Nezha : MonoBehaviour, IDamageable
                 else
                 {
                     anim.Play("throw_enhanced_proj");
-                }
-                yield return new WaitForSeconds(throwProjectile.length * 1.1f);
+                }*/
+                SummonProjectile(0);
+                yield return new WaitForSeconds(throwProjectile ? throwProjectile.length * 1.1f : .2f);
                 break;
             case 2:
                 break;
