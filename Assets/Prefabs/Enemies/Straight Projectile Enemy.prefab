@@ -33,7 +33,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6643003652753717475}
-  - {fileID: 2710385486194707988}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &336334766258170632
@@ -109,37 +108,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!1 &3018438059299829452
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2710385486194707988}
-  m_Layer: 0
-  m_Name: ProjSpawnLoc
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2710385486194707988
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3018438059299829452}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 76442005763796858}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5786447996425264964
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +203,7 @@ PrefabInstance:
     - target: {fileID: -8224802932299756420, guid: 1f885cba8e4dd8742acc01d7b9043fc3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 25de70d1096d5e64f9710e4b769e0e37, type: 2}
+      objectReference: {fileID: 2100000, guid: 7c33c6bc0237c9d4bab1e46911b72fef, type: 2}
     - target: {fileID: -5705001967876982580, guid: 1f885cba8e4dd8742acc01d7b9043fc3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -275,7 +243,7 @@ PrefabInstance:
     - target: {fileID: 5015859198651439293, guid: 1f885cba8e4dd8742acc01d7b9043fc3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 25de70d1096d5e64f9710e4b769e0e37, type: 2}
+      objectReference: {fileID: 2100000, guid: 7c33c6bc0237c9d4bab1e46911b72fef, type: 2}
     - target: {fileID: 7194915799476907095, guid: 1f885cba8e4dd8742acc01d7b9043fc3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
