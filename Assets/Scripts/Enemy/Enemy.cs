@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour, IDamageable
     [SerializeField] protected float attackSpeed;
 
     [Header("ID")]
-    private string id;
+    private string id = "Enemy";
 
     private bool playerLastSeen;
 

@@ -10,11 +10,16 @@ public class SummoningCircle : MonoBehaviour
 
     [Header("SHOULD BE A CHILD AND ENABLED IN HIERARCHY")]
     [SerializeField] private GameObject thingToSummon;
-    [SerializeField] private Component[] scriptsToEnable;
+    [SerializeField] private MonoBehaviour[] scriptsToEnable;
+    [SerializeField] private Collider[] collidersToEnable;
 
     private void Awake()
     {
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, Random.Range(0f, 360f), transform.eulerAngles.z);
+        foreach (Collider collider in collidersToEnable)
+        {
+            collider.enabled = false;
+        }
         foreach (MonoBehaviour script in scriptsToEnable)
         {
             script.enabled = false;
@@ -36,6 +41,10 @@ public class SummoningCircle : MonoBehaviour
     private void SummonThing()
     {
         thingToSummon.transform.parent = null;
+        foreach (Collider collider in collidersToEnable)
+        {
+            collider.enabled = true;
+        }
         foreach (MonoBehaviour script in scriptsToEnable)
         {
             script.enabled = true;
