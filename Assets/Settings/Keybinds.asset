@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Keybinds
   m_EditorClassIdentifier: 
   attack: 323
-  dash: 304
+  dash: 32

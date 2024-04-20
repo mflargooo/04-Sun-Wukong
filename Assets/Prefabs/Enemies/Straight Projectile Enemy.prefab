@@ -78,7 +78,7 @@ MonoBehaviour:
   minWaitWander: 1
   maxWaitWander: 3
   chaseSpeed: 4
-  relocateSpeed: 2
+  relocateSpeed: 1
   maintainDistRange: 9
   aggroRange: 14
   relieveAggroTime: 2
@@ -319,3 +319,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef96f3fbb460be42a81b15f978f437f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackHitBox: {fileID: 0}

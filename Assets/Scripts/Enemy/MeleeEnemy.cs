@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class MeleeEnemy : Enemy
 {
+    [SerializeField] private AnimationClip attackAnim;
     protected override IEnumerator Attack()
     {
-        yield return null;
+        anim.Play("attack");
+        yield return new WaitForSeconds(attackAnim.length + .2f);
         EndAttack();
     }
 }

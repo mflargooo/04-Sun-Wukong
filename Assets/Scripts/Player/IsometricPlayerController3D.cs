@@ -27,6 +27,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private float attackMovePercent;
     [SerializeField] private AnimationClip[] attacks;
+    [SerializeField] private Collider attackCollider;
     private const int MAX_COMBO = 3;
 
     private Ray mouseRay;
@@ -109,6 +110,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     IEnumerator Dash()
     {
         float dt = dashTime;
+        lastFacing = isometricInput.normalized;
         modelTransform.rotation = Quaternion.LookRotation(lastFacing, modelTransform.up);
         while (dt > 0)
         {
@@ -126,16 +128,17 @@ public class IsometricPlayerController3D : MonoBehaviour
         NextState(Movement());
     }
 
-    IEnumerator RotateTowardsTarget(Vector3 vector)
+    void RotateTowardsTarget(Vector3 vector)
     {
         float isoLookAngle = 3f;
-        while ((isoLookAngle = Vector3.SignedAngle(modelTransform.forward, vector, Vector3.up)) > 2f)
+        if ((isoLookAngle = Vector3.SignedAngle(modelTransform.forward, vector, Vector3.up)) > 2f)
         {
             modelTransform.Rotate(modelTransform.up, isoLookAngle * modelRotateMultiplier * Time.deltaTime);
-            yield return null;
         }
-
-        modelTransform.rotation = Quaternion.LookRotation(vector, modelTransform.up);
+        else
+        {
+            modelTransform.rotation = Quaternion.LookRotation(vector, modelTransform.up);
+        }
     }
 
     IEnumerator Attack(int combo)
@@ -147,13 +150,19 @@ public class IsometricPlayerController3D : MonoBehaviour
 
         float attackTime = attacks[combo].length;
         float refAttackTime = attacks[combo].length;
-    
+
         anim.Play("attack_" + combo.ToString());
         Vector3 playerToMouseFloor = new Vector3(mouseToFloorPos.x - transform.position.x, 0f, mouseToFloorPos.z - transform.position.z).normalized;
-        StartCoroutine(RotateTowardsTarget(playerToMouseFloor));
+
+        if (playerToMouseFloor == Vector3.zero)
+        {
+            playerToMouseFloor = Vector3.forward;
+        }
 
         while (attackTime > 0)
         {
+            RotateTowardsTarget(playerToMouseFloor);
+
             switch (combo)
             {
                 case 0:
@@ -185,7 +194,7 @@ public class IsometricPlayerController3D : MonoBehaviour
         }
 
         rb.velocity = Vector3.zero;
-            
+
 
         if (nextCombo)
         {
@@ -204,8 +213,6 @@ public class IsometricPlayerController3D : MonoBehaviour
             }
             NextState(Movement());
         }
-
-        yield return null;
     }
 
     void NextState(IEnumerator next)

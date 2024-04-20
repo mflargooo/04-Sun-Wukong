@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour, IDamageable
     protected virtual void Update()
     {
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
-        
+        if (enemyToPlayer.magnitude > 2 * attackRange && isAttacking != null) EndAttack();
         isLOS = Physics.Raycast(transform.position, enemyToPlayer.normalized, out hit, aggroRange, (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ground"))) && hit.collider.tag == "Player";
     }
 

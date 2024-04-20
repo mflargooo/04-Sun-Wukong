@@ -21,6 +21,11 @@ public class SoundManager : MonoBehaviour
     private static AudioClip[] cas;
     private static AudioSource caSrc;
 
+    [SerializeField] private AudioClip[] meleeSwoosh;
+    [SerializeField] private AudioSource meleeSwooshSource;
+    private static AudioClip[] mss;
+    private static AudioSource msSrc;
+
     private void Start()
     {
         if (!instance)
@@ -34,6 +39,8 @@ public class SoundManager : MonoBehaviour
         pssSrc = playerSwingsSource;
         cas = connectedAttacks;
         caSrc = connectedAttackSource;
+        mss = meleeSwoosh;
+        msSrc = meleeSwooshSource;
     }
     public static void PlayFootstep()
     {
@@ -47,5 +54,10 @@ public class SoundManager : MonoBehaviour
     public static void PlayConnectedAttack()
     {
         caSrc.PlayOneShot(cas[Random.Range(0, cas.Length)]);
+    }
+
+    public static void PlayMeleeSwoosh()
+    {
+        msSrc.PlayOneShot(mss[Random.Range(0, mss.Length)]);
     }
 }
