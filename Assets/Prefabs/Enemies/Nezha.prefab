@@ -78,19 +78,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 819962278970066771}
   anim: {fileID: 575807089461035387}
-  maxHealth: 100
+  maxHealth: 150
   meleeAttacks:
   - {fileID: -5916649853471409691, guid: 23222698bffc7c94e954352bb6371d3c, type: 3}
   - {fileID: -839228454640597260, guid: d80fc69ca79a5404881b1ef6f77105eb, type: 3}
   - {fileID: 1113490428594860984, guid: 5ebb3a2d92313a14b94b42ba731fd0e5, type: 3}
-  throwProjectile: {fileID: 0}
   throwProjectilePrefab: {fileID: 5605102491155814819, guid: 356f9d55caa4f72438459d0d49a6b033, type: 3}
   spawnProjLoc: {fileID: 7558156123973388528}
-  normalBoomerang: {fileID: 0}
-  pulsingBoomerang: {fileID: 0}
+  boomerang: {fileID: 6310842769746218168, guid: 356f9d55caa4f72438459d0d49a6b033, type: 3}
   chaseSpeed: 4
   meleeAttackRange: 2.5
-  rangedAttackRange: 12
+  rangedAttackRange: 7
   attackCooldownFromMelee: 1
   attackCooldownFromRange: 5
 --- !u!195 &819962278970066771

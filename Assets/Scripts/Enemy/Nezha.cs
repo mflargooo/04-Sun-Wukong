@@ -16,12 +16,10 @@ public class Nezha : MonoBehaviour, IDamageable
     [SerializeField] protected float maxHealth;
 
     [SerializeField] private AnimationClip[] meleeAttacks;
-    [SerializeField] private AnimationClip throwProjectile;
     [SerializeField] private NezhaProjectile throwProjectilePrefab;
     [SerializeField] private Transform spawnProjLoc;
 
-    [SerializeField] private GameObject normalBoomerang;
-    [SerializeField] private GameObject pulsingBoomerang;
+    [SerializeField] private GameObject boomerang;
 
     [SerializeField] private float chaseSpeed;
     [SerializeField] protected float meleeAttackRange;
@@ -31,18 +29,19 @@ public class Nezha : MonoBehaviour, IDamageable
 
     protected float health;
 
-    protected Vector3 homePos;
     protected Coroutine state;
     private Coroutine isAttacking;
 
     private bool canAttack = true;
 
-    private void Start()
+    NezhaProjectile proj;
+
+    private void Awake()
     {
+        transform.position = Vector3.up * 1.335f;
         health = maxHealth;
         player = FindObjectOfType<IsometricPlayerController3D>();
 
-        homePos = transform.position;
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         rb = GetComponent<Rigidbody>();
 
@@ -193,17 +192,8 @@ public class Nezha : MonoBehaviour, IDamageable
                 break;
             case 1:
                 agent.enabled = false;
-                /*
-                if (phase == 1)
-                {
-                    anim.Play("throw_normal_proj");
-                }
-                else
-                {
-                    anim.Play("throw_enhanced_proj");
-                }*/
-                SummonProjectile(0);
-                yield return new WaitForSeconds(throwProjectile ? throwProjectile.length * 1.1f : .2f);
+                SummonProjectile(1);
+                yield return new WaitForSeconds(.5f);
                 break;
             case 2:
                 break;
@@ -216,7 +206,7 @@ public class Nezha : MonoBehaviour, IDamageable
 
     private void SummonProjectile(int type)
     {
-        NezhaProjectile proj = Instantiate(throwProjectilePrefab, spawnProjLoc.position, throwProjectilePrefab.transform.rotation);
+        proj = Instantiate(throwProjectilePrefab, spawnProjLoc.position, throwProjectilePrefab.transform.rotation);
         proj.BoomerangTo(spawnProjLoc, player.transform.position + Vector3.up * (spawnProjLoc.position.y - player.transform.position.y), type);
     }
 
@@ -226,8 +216,9 @@ public class Nezha : MonoBehaviour, IDamageable
         canAttack = true;
     }
 
-    private void EndAttack()
+    void EndAttack()
     {
+        if (isAttacking == null) return;
         StopCoroutine(isAttacking);
         isAttacking = null;
     }

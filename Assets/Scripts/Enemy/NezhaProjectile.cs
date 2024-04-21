@@ -5,12 +5,14 @@ using UnityEngine;
 public class NezhaProjectile : MonoBehaviour
 {
     [SerializeField] private GameObject model;
-    [SerializeField] private GameObject pulse;
-    [SerializeField] private Animator anim;
-    [SerializeField] private AnimationClip pulseAnim;
+    [SerializeField] private ParticleSystem pulse;
+    [SerializeField] private Collider pulseCollider;
+    [SerializeField] private float timeBTWPulses;
+    [SerializeField] private float timeTilMaxPulseDist;
     [SerializeField] private float rotateVelocity;
     [SerializeField] private uint numPulses;
     [SerializeField] private float boomerangSpeed;
+    [SerializeField] private float boomerangReturnSpeed;
 
     private void Update()
     {
@@ -22,21 +24,39 @@ public class NezhaProjectile : MonoBehaviour
         StartCoroutine(Boomerang(returnLoc, targetPos, type));
     }
 
+    float BoomerangPathRadius(float k, float time)
+    {
+        return Mathf.Abs(k * Mathf.Sin(time));
+    }
+
     IEnumerator Boomerang(Transform returnLoc, Vector3 targetPos, int type)
     {
-        Vector3 diff = Vector3.zero;
-        while ((diff = targetPos - transform.position).sqrMagnitude > .01f)
+        Vector3 startPos = returnLoc.position;
+        Vector3 diff = targetPos - startPos;
+        float k = diff.magnitude / 2;
+        float angle = Mathf.Deg2Rad * Vector3.SignedAngle(Vector3.forward, diff.normalized, Vector3.up);
+        float timer = 0;
+
+        while (timer < Mathf.PI / 2)
         {
-            transform.position += diff.normalized * boomerangSpeed * Time.deltaTime;
+            transform.position = startPos + new Vector3(Mathf.Cos(timer) - Mathf.Sin(angle), 0f, Mathf.Sin(timer) + Mathf.Cos(angle)) * BoomerangPathRadius(k, timer);
+            timer += Time.deltaTime * boomerangSpeed;
             yield return null;
         }
         if (type == 1)
         {
             yield return StartCoroutine(Pulse());
         }
-        while((diff = returnLoc.position - transform.position).sqrMagnitude > .01f)
+        while (timer < Mathf.PI)
         {
-            transform.position += diff.normalized * boomerangSpeed * Time.deltaTime;
+            transform.position = startPos + new Vector3(Mathf.Cos(timer) - Mathf.Sin(angle), 0f, Mathf.Sin(timer) + Mathf.Cos(angle)) * BoomerangPathRadius(k, timer);
+            timer += Time.deltaTime * boomerangSpeed;
+            yield return null;
+        }
+        
+        while((diff = returnLoc.position - transform.position).magnitude > .1f)
+        {
+            transform.position += diff.normalized * boomerangReturnSpeed * Time.deltaTime;
             yield return null;
         }
         Destroy(gameObject);
@@ -47,8 +67,12 @@ public class NezhaProjectile : MonoBehaviour
     {
         for (uint i = 0; i < numPulses; i++)
         {
-            anim.Play("pulse");
-            yield return new WaitForSeconds(pulseAnim.length * 1.5f);
+            if (!pulse.isPlaying) pulse.Play();
+            yield return new WaitForSeconds(timeTilMaxPulseDist);
+            pulseCollider.enabled = true;
+            yield return new WaitForSeconds(.2f);
+            pulseCollider.enabled = false;
+            yield return new WaitForSeconds(timeBTWPulses);
         }
     }
 }

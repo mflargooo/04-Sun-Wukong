@@ -7,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] private int baseTotalEnemyCount;
     // [SerializeField] private int[] maxEnemyTypeCount;
     [SerializeField] private GameObject[] enemies;
+    [SerializeField] private GameObject nezha;
     [SerializeField] private float spawnRadius;
     [SerializeField] private float minDistBetweenSpawns;
 
@@ -15,8 +16,11 @@ public class SpawnManager : MonoBehaviour
     private int currentEnemyCount = 0;
     List<Vector3> spawnLocs;
 
+    private Transform player;
+
     private void Start()
     {
+        player = FindObjectOfType<IsometricPlayerController3D>().transform;
         StartCoroutine(SpawnWave());
     }
     Vector3 GetPointInCircle()
@@ -27,7 +31,7 @@ public class SpawnManager : MonoBehaviour
         float cos = Mathf.Cos(angle);
         float sin = Mathf.Sin(angle);
 
-        return new Vector3(cos + sin, 0f, cos - sin) * radius;
+        return new Vector3(cos - sin, 0f, cos + sin) * radius;
     }
 
     public void RemoveEnemy(string id)
@@ -36,8 +40,6 @@ public class SpawnManager : MonoBehaviour
         {
             currentEnemyCount -= 1;
         }
-
-        print(currentEnemyCount);
 
         if (currentEnemyCount <= 0)
         {
@@ -55,12 +57,20 @@ public class SpawnManager : MonoBehaviour
         waveCount++;
         /* Display wave number or something */
         yield return null;
-        currentEnemyCount = NumTotalEnemiesBasedOnWave(waveCount);
         StartCoroutine(SpawnEnemies(currentEnemyCount));
     }
 
-    IEnumerator SpawnEnemies(int numEnemies)
+    IEnumerator SpawnEnemies(int wave)
     {
+        currentEnemyCount = NumTotalEnemiesBasedOnWave(waveCount);
+
+        if (wave % 10 == 0) {
+            Vector3 spawnLookDir = player.transform.position - transform.position - Vector3.up * (transform.position.y - player.position.y);
+            currentEnemyCount = 1;
+            Instantiate(nezha, transform.position, Quaternion.LookRotation(spawnLookDir, Vector3.up));
+        }
+
+        int numEnemies = currentEnemyCount;
         spawnLocs = new List<Vector3>();
         for (int i = 0; i < numEnemies; i++)
         {
@@ -84,8 +94,8 @@ public class SpawnManager : MonoBehaviour
                 }
             }
 
-            spawnLocs.Insert(i, transform.position + GetPointInCircle());
-            Instantiate(enemies[enemyType], spawnLocs[i], enemies[enemyType].transform.rotation);
+            spawnLocs.Insert(i, newLoc);
+            Instantiate(enemies[enemyType], newLoc, enemies[enemyType].transform.rotation);
             yield return new WaitForSeconds(.5f);
         }
     }

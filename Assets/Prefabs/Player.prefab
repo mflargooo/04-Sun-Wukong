@@ -1691,7 +1691,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 484.40002, y: 67.40918}
+  m_SizeDelta: {x: 968.8, y: 134.81836}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4608683271688398856
 CanvasRenderer:
@@ -2640,7 +2640,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2979,8 +2979,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 190, y: 35}
-  m_SizeDelta: {x: 484.4, y: 67.40918}
+  m_AnchoredPosition: {x: 375, y: 75}
+  m_SizeDelta: {x: 968.8, y: 134.81836}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8158231299891536013
 MonoBehaviour:
@@ -5526,7 +5526,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 5, y: -5}
-  m_SizeDelta: {x: 462.5, y: 25}
+  m_SizeDelta: {x: 925, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1457949044569429835
 CanvasRenderer:
