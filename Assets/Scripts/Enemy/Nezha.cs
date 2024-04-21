@@ -192,7 +192,7 @@ public class Nezha : MonoBehaviour, IDamageable
                 break;
             case 1:
                 agent.enabled = false;
-                SummonProjectile(1);
+                SummonProjectile();
                 yield return new WaitForSeconds(.5f);
                 break;
             case 2:
@@ -204,10 +204,10 @@ public class Nezha : MonoBehaviour, IDamageable
         EndAttack();
     }
 
-    private void SummonProjectile(int type)
+    private void SummonProjectile()
     {
         proj = Instantiate(throwProjectilePrefab, spawnProjLoc.position, throwProjectilePrefab.transform.rotation);
-        proj.BoomerangTo(spawnProjLoc, player.transform.position + Vector3.up * (spawnProjLoc.position.y - player.transform.position.y), type);
+        proj.BoomerangTo(spawnProjLoc, player.transform.position + Vector3.up * (spawnProjLoc.position.y - player.transform.position.y));
     }
 
     IEnumerator DoAttackCooldown(float attackSpeed)
