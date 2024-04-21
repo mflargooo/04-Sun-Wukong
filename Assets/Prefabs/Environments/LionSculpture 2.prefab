@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5599734150055265675}
   - component: {fileID: 833609780066489286}
   - component: {fileID: 6443003553614656611}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LionSculpture 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

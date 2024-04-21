@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 581077598582748524}
   - component: {fileID: 7448126863820242368}
   - component: {fileID: 3683966074313149949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: temple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.35355338, y: -0.35355338, z: 0.1464466, w: 0.8535535}
   m_LocalPosition: {x: -9.35, y: 4.7, z: -2.5}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
