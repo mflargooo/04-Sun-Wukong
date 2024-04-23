@@ -72,14 +72,17 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(.2f);
+            yield return new WaitForSeconds(5f);
             waveCount++;
-            waveText.text = "V@UD " + waveCount.ToString();
-            waveText.gameObject.SetActive(true);
-            SoundManager.PlayGong();
-            yield return new WaitForSeconds(3f);
-            waveText.gameObject.SetActive(false);
-            yield return null;
+            if (lastWave > 1)
+            {
+                waveText.text = "V@UD " + waveCount.ToString();
+                waveText.gameObject.SetActive(true);
+                SoundManager.PlayGong();
+                yield return new WaitForSeconds(3f);
+                waveText.gameObject.SetActive(false);
+                yield return null;
+            }
             StartCoroutine(SpawnEnemies(waveCount));
         }
     }
