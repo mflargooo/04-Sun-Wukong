@@ -21,7 +21,6 @@ public class RangedEnemy : Enemy
     {
         base.Update();
     }
-
     public void SpawnProjectile()
     {
         Vector3 centralize = Vector3.Cross(transform.forward, transform.up).normalized;

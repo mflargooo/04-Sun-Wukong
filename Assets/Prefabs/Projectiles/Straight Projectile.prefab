@@ -1153,4 +1153,4 @@ MonoBehaviour:
   damageOnContact:
     serializedVersion: 2
     m_Bits: 64
-  launchSpeed: 12
+  launchSpeed: 18

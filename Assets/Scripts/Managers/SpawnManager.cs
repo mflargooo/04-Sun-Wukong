@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class SpawnManager : MonoBehaviour
 {
+    [SerializeField] private Animator anim;
     [SerializeField] private int baseTotalEnemyCount;
-    // [SerializeField] private int[] maxEnemyTypeCount;
     [SerializeField] private GameObject[] enemies;
     [SerializeField] private GameObject nezha;
     [SerializeField] private float spawnRadius;
@@ -18,10 +19,13 @@ public class SpawnManager : MonoBehaviour
 
     private Transform player;
 
+    [SerializeField] private int lastWave;
+    [SerializeField] private TMP_Text waveText;
+
     private void Start()
     {
         player = FindObjectOfType<IsometricPlayerController3D>().transform;
-        StartCoroutine(SpawnWave());
+        StartCoroutine(SpawnWave(false));
     }
     Vector3 GetPointInCircle()
     {
@@ -39,11 +43,14 @@ public class SpawnManager : MonoBehaviour
         if (id == "Enemy")
         {
             currentEnemyCount -= 1;
+            if (currentEnemyCount <= 0)
+            {
+                StartCoroutine(SpawnWave(true));
+            }
         }
-
-        if (currentEnemyCount <= 0)
+        else if (id == "Nezha")
         {
-            StartCoroutine(SpawnWave());
+            Debug.Log("CONGRATS U WIN!");
         }
     }
 
@@ -52,51 +59,68 @@ public class SpawnManager : MonoBehaviour
         return baseTotalEnemyCount + (int) (wave * wave / 49 + .75f);
     }
     
-    private IEnumerator SpawnWave()
+    private IEnumerator SpawnWave(bool playEnd)
     {
-        waveCount++;
-        /* Display wave number or something */
-        yield return null;
-        StartCoroutine(SpawnEnemies(currentEnemyCount));
+        if (playEnd)
+        {
+            SoundManager.PlayCheer();
+            yield return new WaitForSeconds(3f);
+        }
+        if (waveCount == lastWave)
+        {
+            anim.Play("fade_out");
+        }
+        else
+        {
+            yield return new WaitForSeconds(.2f);
+            waveCount++;
+            waveText.text = "V@UD " + waveCount.ToString();
+            waveText.gameObject.SetActive(true);
+            SoundManager.PlayGong();
+            yield return new WaitForSeconds(3f);
+            waveText.gameObject.SetActive(false);
+            yield return null;
+            StartCoroutine(SpawnEnemies(waveCount));
+        }
     }
 
     IEnumerator SpawnEnemies(int wave)
     {
         currentEnemyCount = NumTotalEnemiesBasedOnWave(waveCount);
 
-        if (wave % 10 == 0) {
-            Vector3 spawnLookDir = player.transform.position - transform.position - Vector3.up * (transform.position.y - player.position.y);
-            currentEnemyCount = 1;
-            Instantiate(nezha, transform.position, Quaternion.LookRotation(spawnLookDir, Vector3.up));
-        }
-
-        int numEnemies = currentEnemyCount;
-        spawnLocs = new List<Vector3>();
-        for (int i = 0; i < numEnemies; i++)
+        if (wave == 10)
         {
-            int enemyType = Random.Range(0, enemies.Length);
-            Vector3 newLoc = transform.position + GetPointInCircle();
-
-            int attempts = 0;
-            while(attempts < 250)
+            currentEnemyCount = 1;
+            Instantiate(nezha, transform.position, nezha.transform.rotation);
+        }
+        else
+        {
+            int numEnemies = currentEnemyCount;
+            spawnLocs = new List<Vector3>();
+            for (int i = 0; i < numEnemies; i++)
             {
-                yield return null;
-                attempts++;
-                foreach (Vector3 v in spawnLocs)
-                {
-                    yield return null;
-                    if ((newLoc - v).sqrMagnitude < minDistBetweenSpawns * minDistBetweenSpawns)
-                    {
-                        newLoc = transform.position + GetPointInCircle();
-                        break;
-                    }
-                    else attempts = 250;
-                }
-            }
+                int enemyType = Random.Range(0, enemies.Length);
+                Vector3 newLoc = transform.position + GetPointInCircle();
 
-            spawnLocs.Insert(i, newLoc);
-            Instantiate(enemies[enemyType], newLoc, enemies[enemyType].transform.rotation);
-            yield return new WaitForSeconds(.5f);
+                int attempts = 0;
+                while (attempts < 250)
+                {
+                    attempts++;
+                    foreach (Vector3 v in spawnLocs)
+                    {
+                        if ((newLoc - v).sqrMagnitude < minDistBetweenSpawns * minDistBetweenSpawns)
+                        {
+                            newLoc = transform.position + GetPointInCircle();
+                            break;
+                        }
+                        else attempts = 250;
+                    }
+                }
+
+                spawnLocs.Insert(i, newLoc);
+                Instantiate(enemies[enemyType], newLoc, enemies[enemyType].transform.rotation);
+                yield return new WaitForSeconds(.5f);
+            }
         }
     }
 }

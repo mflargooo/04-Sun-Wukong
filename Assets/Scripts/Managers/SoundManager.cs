@@ -26,6 +26,16 @@ public class SoundManager : MonoBehaviour
     private static AudioClip[] mss;
     private static AudioSource msSrc;
 
+    [SerializeField] private AudioClip gong;
+    [SerializeField] private AudioSource gongSource;
+    private static AudioClip gs;
+    private static AudioSource gsSrc;
+
+    [SerializeField] private AudioClip cheer;
+    [SerializeField] private AudioSource cheerSource;
+    private static AudioClip chs;
+    private static AudioSource chsSrc;
+
     private void Start()
     {
         if (!instance)
@@ -41,6 +51,10 @@ public class SoundManager : MonoBehaviour
         caSrc = connectedAttackSource;
         mss = meleeSwoosh;
         msSrc = meleeSwooshSource;
+        gs = gong;
+        gsSrc = gongSource;
+        chs = cheer;
+        chsSrc = cheerSource;
     }
     public static void PlayFootstep()
     {
@@ -59,5 +73,14 @@ public class SoundManager : MonoBehaviour
     public static void PlayMeleeSwoosh()
     {
         msSrc.PlayOneShot(mss[Random.Range(0, mss.Length)]);
+    }
+
+    public static void PlayGong()
+    {
+        gsSrc.PlayOneShot(gs);
+    }
+    public static void PlayCheer()
+    {
+        chsSrc.PlayOneShot(chs);
     }
 }

@@ -12,5 +12,10 @@ public class PlayerAttack : MonoBehaviour
             dmg.Damage(damage);
             SoundManager.PlayConnectedAttack();
         }       
+
+        if (other.TryGetComponent<IKnockbackable>(out IKnockbackable kb))
+        {
+            kb.Knockback((other.transform.position - transform.position - Vector3.up * (other.transform.position.y + transform.position.y)).normalized);
+        }
     }
 }

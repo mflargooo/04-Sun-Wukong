@@ -5011,7 +5011,7 @@ MonoBehaviour:
   timeTilMaxPulseDist: 0.4
   rotateVelocity: 0
   numPulses: 3
-  boomerangSpeed: 3
+  boomerangSpeed: 2
   boomerangReturnSpeed: 11
 --- !u!1 &7575019227736226637
 GameObject:

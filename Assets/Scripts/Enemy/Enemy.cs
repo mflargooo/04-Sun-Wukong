@@ -3,48 +3,55 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 {
     [Header("Components")]
-    [SerializeField] private NavMeshAgent agent;
+    [SerializeField] private Rigidbody rb;
+    [SerializeField] protected NavMeshAgent agent;
     protected IsometricPlayerController3D player;
     [SerializeField] protected Animator anim;
 
     protected RaycastHit hit;
     protected bool isLOS;
 
-    Vector3 enemyToPlayer;
+    protected Vector3 enemyToPlayer;
 
     [SerializeField] protected float maxHealth;
 
     [Header("Wander")]
-    [SerializeField] private float wanderRadius;
-    [SerializeField] private float wanderSpeed;
-    [SerializeField] private float minWaitWander;
-    [SerializeField] private float maxWaitWander;
+    [SerializeField] protected float wanderRadius;
+    [SerializeField] protected float wanderSpeed;
+    [SerializeField] protected float minWaitWander;
+    [SerializeField] protected float maxWaitWander;
 
     [Header("Chase")]
-    [SerializeField] private float chaseSpeed;
-    [SerializeField] private float relocateSpeed;
-    [SerializeField] private float maintainDistRange;
+    [SerializeField] protected float chaseSpeed;
+    [SerializeField] protected float relocateSpeed;
+    [SerializeField] protected float maintainDistRange;
     [SerializeField] protected float aggroRange;
     [SerializeField] protected float relieveAggroTime;
     [SerializeField] protected float attackRange;
     [SerializeField] protected float attackSpeed;
 
+    [Header("Knockback")]
+    [SerializeField] protected float knockbackSpeed;
+    [SerializeField] protected float knockbackTime;
+
     [Header("ID")]
     private string id = "Enemy";
 
-    private bool playerLastSeen;
+    protected bool playerLastSeen;
 
     protected float health;
 
     protected Vector3 homePos;
     protected Coroutine state;
-    private Coroutine isAttacking;
+    protected Coroutine isAttacking;
+    protected Coroutine isKnockingback;
 
     protected virtual void Start()
     {
+        rb = GetComponent<Rigidbody>();
         health = maxHealth;
         player = FindObjectOfType<IsometricPlayerController3D>();
 
@@ -57,6 +64,26 @@ public class Enemy : MonoBehaviour, IDamageable
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         if (enemyToPlayer.magnitude > 2 * attackRange && isAttacking != null) EndAttack();
         isLOS = Physics.Raycast(transform.position, enemyToPlayer.normalized, out hit, aggroRange, (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ground"))) && hit.collider.tag == "Player";
+    }
+
+    public void Knockback(Vector3 dir)
+    {
+        if (isKnockingback != null) return;
+
+        isKnockingback = StartCoroutine(DoKnockback(dir));
+    }
+
+    IEnumerator DoKnockback(Vector3 dir)
+    {
+        float timer = 0;
+        while(timer < knockbackTime)
+        {
+            rb.velocity = dir * knockbackSpeed;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        rb.velocity = Vector3.zero;
+
     }
 
     public void Damage(float damage)
@@ -111,7 +138,7 @@ public class Enemy : MonoBehaviour, IDamageable
         }
     }
 
-    protected IEnumerator Aggro()
+    protected virtual IEnumerator Aggro()
     {
         float rat = relieveAggroTime;
         float lockOnAngle = 0f;
@@ -147,9 +174,8 @@ public class Enemy : MonoBehaviour, IDamageable
                         agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - maintainDistRange));
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
-                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
-
+                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 1.5f * Time.deltaTime);
+                        
                         agent.speed = relocateSpeed;
                         if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
                     }
@@ -157,8 +183,7 @@ public class Enemy : MonoBehaviour, IDamageable
                     {
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
-                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 1.5f * Time.deltaTime);
 
                         agent.SetDestination(transform.position);
 

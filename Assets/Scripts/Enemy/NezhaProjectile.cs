@@ -50,7 +50,6 @@ public class NezhaProjectile : MonoBehaviour
     IEnumerator Pulse()
     {
         float maxRadius = pulseCollider.radius;
-        print(maxRadius);
         for (uint i = 0; i < numPulses; i++)
         {
             yield return new WaitForSeconds(timeBTWPulses);
