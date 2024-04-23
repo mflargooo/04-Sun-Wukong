@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
         player = FindObjectOfType<IsometricPlayerController3D>();
 
         homePos = transform.position;
-        state = StartCoroutine(Wander());
+        state = StartCoroutine(Aggro());
     }
 
     protected virtual void Update()
@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
                         agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - maintainDistRange));
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 2f * Time.deltaTime);
+                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
                         
                         agent.speed = relocateSpeed;
                         if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());

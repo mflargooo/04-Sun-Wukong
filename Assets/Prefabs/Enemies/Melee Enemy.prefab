@@ -1627,12 +1627,12 @@ MonoBehaviour:
   maxWaitWander: 0
   chaseSpeed: 4
   relocateSpeed: 1
-  maintainDistRange: 1
+  maintainDistRange: 0.5
   aggroRange: 30
-  relieveAggroTime: 2
-  attackRange: 2.5
+  relieveAggroTime: 4
+  attackRange: 1
   attackSpeed: 1.5
-  knockbackSpeed: 15
+  knockbackSpeed: 20
   knockbackTime: 0.1
   attackAnim: {fileID: 6513052471329295973, guid: 9f56dbeb3c2459e49ad736ddfa06bcef, type: 3}
 --- !u!54 &6428794126241877211
