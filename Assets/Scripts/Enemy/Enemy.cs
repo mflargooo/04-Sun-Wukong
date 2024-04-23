@@ -174,7 +174,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
                         agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - maintainDistRange));
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 1.5f * Time.deltaTime);
+                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 2f * Time.deltaTime);
                         
                         agent.speed = relocateSpeed;
                         if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
@@ -183,7 +183,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
                     {
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 1.5f * Time.deltaTime);
+                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 2f * Time.deltaTime);
 
                         agent.SetDestination(transform.position);
 

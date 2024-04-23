@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7583084581107209829}
   - component: {fileID: 8103319047101733621}
-  - component: {fileID: 8444161003431759695}
   m_Layer: 7
   m_Name: temple2
   m_TagString: Untagged
@@ -85,24 +84,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!65 &8444161003431759695
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2175553092979735196}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 35.079998, y: 24.802656, z: 0.20000038}
-  m_Center: {x: 0, y: 0, z: 0}
