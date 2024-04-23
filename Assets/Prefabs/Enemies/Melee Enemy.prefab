@@ -1620,18 +1620,18 @@ MonoBehaviour:
   rb: {fileID: 6428794126241877211}
   agent: {fileID: 7631897327131564668}
   anim: {fileID: 2569936020746195406}
-  maxHealth: 10
+  maxHealth: 13
   wanderRadius: 1
   wanderSpeed: 2
-  minWaitWander: 0.2
-  maxWaitWander: 0.5
+  minWaitWander: 0
+  maxWaitWander: 0
   chaseSpeed: 4
   relocateSpeed: 1
   maintainDistRange: 1
-  aggroRange: 12
+  aggroRange: 30
   relieveAggroTime: 2
-  attackRange: 1.2
-  attackSpeed: 2
+  attackRange: 2.5
+  attackSpeed: 1.5
   knockbackSpeed: 15
   knockbackTime: 0.1
   attackAnim: {fileID: 6513052471329295973, guid: 9f56dbeb3c2459e49ad736ddfa06bcef, type: 3}

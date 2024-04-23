@@ -74,19 +74,19 @@ MonoBehaviour:
   rb: {fileID: 3839852093482022956}
   agent: {fileID: 5081357986733709593}
   anim: {fileID: 1063210136503743229}
-  maxHealth: 5
+  maxHealth: 9
   wanderRadius: 3
   wanderSpeed: 3
   minWaitWander: 1
   maxWaitWander: 3
   chaseSpeed: 4
-  relocateSpeed: 1
-  maintainDistRange: 9
-  aggroRange: 14
+  relocateSpeed: 0.7
+  maintainDistRange: 11
+  aggroRange: 30
   relieveAggroTime: 2
   attackRange: 12
-  attackSpeed: 2
-  knockbackSpeed: 25
+  attackSpeed: 1.5
+  knockbackSpeed: 15
   knockbackTime: 0.1
   projectilePrefab: {fileID: 3742915848987456777, guid: 25f006c8dd5a33444848706ff566ca3d, type: 3}
   projSpawnLoc: {fileID: 2338668998144692880}
