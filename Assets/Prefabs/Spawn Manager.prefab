@@ -395,12 +395,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 5899922454228631702}
-  baseTotalEnemyCount: 4
+  baseTotalEnemyCount: 6
   enemies:
   - {fileID: 2875809133921214866, guid: a88db21798d14e8488523b15d77a8b64, type: 3}
   - {fileID: 6638077682818569057, guid: e5e0f93e9e3443f45ac5f7fc694caf67, type: 3}
   nezha: {fileID: 8033466705987366567, guid: 111649785f3bfc9488b8b68d5a918300, type: 3}
-  spawnRadius: 7
+  spawnRadius: 10
   minDistBetweenSpawns: 2
-  lastWave: 3
+  lastWave: 5
   waveText: {fileID: 3069609387962041929}

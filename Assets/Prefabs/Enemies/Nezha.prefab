@@ -410,7 +410,7 @@ MonoBehaviour:
   meleeAttackRange: 3.5
   rangedAttackRange: 7
   attackCDOfMelee: 0.5
-  attackCDOfSpear: 1
+  attackCDOfSpear: 5
   attackCDOfRanged: 4
   attackCDOfGround: 6
 --- !u!195 &819962278970066771
