@@ -53,6 +53,8 @@ public class Nezha : MonoBehaviour, IDamageable
 
     private NezhaProjectile proj;
 
+    [SerializeField] private Renderer[] modelObjs;
+
     private void Awake()
     {
         transform.position = Vector3.up * 1.335f;
@@ -86,6 +88,20 @@ public class Nezha : MonoBehaviour, IDamageable
         if (health <= 0f)
         {
             End();
+        }
+        StartCoroutine(Flash());
+    }
+
+    IEnumerator Flash()
+    {
+       foreach (Renderer rend in modelObjs)
+       {
+           rend.enabled = false;
+       }
+        yield return new WaitForSeconds(.1f);
+        foreach (Renderer rend in modelObjs)
+        {
+            rend.enabled = true;
         }
     }
 
@@ -159,11 +175,22 @@ public class Nezha : MonoBehaviour, IDamageable
                 }
             }
 
-            if (isAttacking == null && lockOnAngle <= .2f && mag <= meleeAttackRange && canMeleeAttack && attackCD <= 0f)
+            if (isAttacking == null && lockOnAngle <= .2f && attackCD <= 0f)
             {
-                rb.velocity = Vector3.zero;
-                agent.SetDestination(transform.position);
-                isAttacking = StartCoroutine(Attack(0, 1));
+                if (mag <= meleeAttackRange && canMeleeAttack)
+                {
+                    rb.velocity = Vector3.zero;
+                    if (agent.enabled)
+                        agent.SetDestination(transform.position);
+                    isAttacking = StartCoroutine(Attack(0, 2));
+                }
+                else if (mag <= rangedAttackRange && !proj && canRangedAttack)
+                {
+                    rb.velocity = Vector3.zero;
+                    if (agent.enabled)
+                        agent.SetDestination(transform.position);
+                    isAttacking = StartCoroutine(Attack(1, 2));
+                }
             }
 
             yield return isAttacking;
@@ -184,70 +211,6 @@ public class Nezha : MonoBehaviour, IDamageable
             {
                 NextState(PhaseThree());
             }
-            mag = enemyToPlayer.magnitude;
-            lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
-
-            if (attackCD > 0f)
-            {
-                attackCD -= Time.deltaTime;
-            }
-
-            if (agent.enabled)
-            {
-                if (attackCD <= 0f)
-                {
-                    if (mag > meleeAttackRange)
-                    {
-                        agent.updateRotation = false;
-                        if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
-                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
-                    }
-                    else
-                    {
-                        agent.updateRotation = true;
-                    }
-                    agent.SetDestination(player.transform.position);
-                }
-                else
-                {
-                    agent.updateRotation = false;
-                    if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
-                    else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
-                    agent.SetDestination(player.transform.position - enemyToPlayer.normalized * maintainDistRange);
-                }
-            }
-
-            if (isAttacking == null && lockOnAngle <= .2f && attackCD <= 0f)
-            {
-                if (mag <= meleeAttackRange && canMeleeAttack)
-                {
-                    rb.velocity = Vector3.zero;
-                    if (agent.enabled)
-                        agent.SetDestination(transform.position);
-                    isAttacking = StartCoroutine(Attack(0, 2));
-                }
-                else if(mag <= rangedAttackRange && !proj && canRangedAttack)
-                {
-                    rb.velocity = Vector3.zero;
-                    if (agent.enabled)
-                        agent.SetDestination(transform.position);
-                    isAttacking = StartCoroutine(Attack(1, 2));
-                }
-            }
-
-            yield return isAttacking;
-        }
-    }
-
-    private IEnumerator PhaseThree()
-    {
-        print("STARTING PHASE THRHEE");
-
-        float lockOnAngle = 0f;
-        float mag = 0f;
-        agent.speed = chaseSpeed;
-        while (true)
-        {
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
@@ -322,6 +285,97 @@ public class Nezha : MonoBehaviour, IDamageable
         }
     }
 
+    private IEnumerator PhaseThree()
+    {
+        print("STARTING PHASE THRHEE");
+
+        float lockOnAngle = 0f;
+        float mag = 0f;
+        agent.speed = chaseSpeed;
+        while (true)
+        {
+            mag = enemyToPlayer.magnitude;
+            lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
+
+            if (attackCD > 0f)
+            {
+                attackCD -= Time.deltaTime;
+            }
+
+            if (agent.enabled)
+            {
+                if (attackCD <= 0f)
+                {
+                    if (mag > meleeAttackRange)
+                    {
+                        agent.updateRotation = false;
+                        if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    }
+                    else
+                    {
+                        agent.updateRotation = true;
+                    }
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    agent.updateRotation = false;
+                    if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                    else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    agent.SetDestination(player.transform.position - enemyToPlayer.normalized * maintainDistRange);
+                }
+            }
+
+            if (isAttacking == null && lockOnAngle <= .2f && attackCD <= 0f)
+            {
+                if (mag <= meleeAttackRange)
+                {
+                    if (Random.Range(0, 1) < .9f && canMeleeAttack)
+                    {
+                        rb.velocity = Vector3.zero;
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(0, 3));
+                    }
+                    else if (canSpearAttack)
+                    {
+                        rb.velocity = Vector3.zero;
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(2, 3));
+                    }
+                }
+                else if (meleeAttackRange < mag && mag <= rangedAttackRange)
+                {
+                    float prob = Random.Range(0f, 1f);
+                    if (prob < .5f && !proj && canRangedAttack)
+                    {
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(1, 3));
+                    }
+                    else if (prob < .75f && canSpearAttack)
+                    {
+                        rb.velocity = Vector3.zero;
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(2, 3));
+                    }
+                    else if (canGroundAttack)
+                    {
+                        rb.velocity = Vector3.zero;
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(3, 3));
+                    }
+                }
+            }
+
+            yield return isAttacking;
+        }
+    }
+
     /* Attack 0 is basic melee combo, 1 is throw projectile, 2 is */
     /* Phases are 1-indexed */
     private IEnumerator Attack(int type, int phase)
@@ -384,7 +438,8 @@ public class Nezha : MonoBehaviour, IDamageable
                 canGroundAttack = false;
                 anim.Play("phase_2_start");
                 yield return new WaitForSeconds(groundSpearAnim.length * 2f);
-                Instantiate(geyserAttack, player.transform.position - (Vector3.up * (player.transform.position.y - .01f)) + player.transform.GetChild(0).transform.forward, transform.rotation);
+                Instantiate(geyserAttack, player.transform.position - (Vector3.up * (player.transform.position.y - .01f)) + player.transform.GetChild(0).transform.forward * player.isometricInput.magnitude * 2f, Quaternion.Euler(Vector3.up * Random.Range(0f, 360f)));
+                StartCoroutine(DoGroundCooldown());
                 break;
         }
 
@@ -415,19 +470,19 @@ public class Nezha : MonoBehaviour, IDamageable
     }
     IEnumerator DoRangedCooldown()
     {
-        attackCD = 1f;
+        attackCD = 1.5f;
         yield return new WaitForSeconds(attackCDOfRanged);
         canRangedAttack = true;
     }
     IEnumerator DoSpearCooldown()
     {
-        attackCD = 2f;
+        attackCD = 3f;
         yield return new WaitForSeconds(attackCDOfSpear);
         canSpearAttack = true;
     }
     IEnumerator DoGroundCooldown()
     {
-        attackCD = 1f;
+        attackCD = 3f;
         yield return new WaitForSeconds(attackCDOfGround);
         canGroundAttack = true;
     }

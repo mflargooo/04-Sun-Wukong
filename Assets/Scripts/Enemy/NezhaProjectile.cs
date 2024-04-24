@@ -6,9 +6,7 @@ public class NezhaProjectile : MonoBehaviour
 {
     [SerializeField] private GameObject model;
     [SerializeField] private ParticleSystem pulse;
-    [SerializeField] private SphereCollider pulseCollider;
     [SerializeField] private float timeBTWPulses;
-    [SerializeField] private float timeTilMaxPulseDist;
     [SerializeField] private float rotateVelocity;
     [SerializeField] private uint numPulses;
     [SerializeField] private float boomerangSpeed;
@@ -51,23 +49,11 @@ public class NezhaProjectile : MonoBehaviour
 
     IEnumerator Pulse()
     {
-        float maxRadius = pulseCollider.radius;
         for (uint i = 0; i < numPulses; i++)
         {
             yield return new WaitForSeconds(timeBTWPulses);
             if (!pulse.isPlaying) pulse.Play();
             SoundManager.instance.PlayPulseSound();
-            float timer = .001f;
-            pulseCollider.enabled = true;
-            while (timer < timeTilMaxPulseDist)
-            {
-                timer += Time.deltaTime;
-                pulseCollider.radius = maxRadius * timer / timeTilMaxPulseDist;
-                yield return null;
-            }
-            pulseCollider.enabled = false;
-            yield return new WaitForSeconds(.1f);
-
         }
 
         yield return new WaitForSeconds(.5f);

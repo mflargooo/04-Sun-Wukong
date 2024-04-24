@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     protected IsometricPlayerController3D player;
     [SerializeField] protected Animator anim;
 
+    [Header("Model")]
+    [SerializeField] private Renderer[] modelObjs;
+
     protected RaycastHit hit;
     protected bool isLOS;
 
@@ -95,10 +98,23 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     public void Damage(float damage)
     {
         health -= damage;
-
         if (health <= 0f)
         {
             End();
+        }
+        StartCoroutine(Flash());
+    }
+
+    IEnumerator Flash()
+    {
+        foreach (Renderer rend in modelObjs)
+        {
+            rend.enabled = false;
+        }
+        yield return new WaitForSeconds(.1f);
+        foreach (Renderer rend in modelObjs)
+        {
+            rend.enabled = true;
         }
     }
 
