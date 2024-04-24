@@ -4642,10 +4642,10 @@ MonoBehaviour:
   modelTransform: {fileID: 7960404011825782762}
   modelRotateMultiplier: 10
   moveSpeed: 7
-  dashSpeed: 20
+  dashSpeed: 22
   dashTime: 0.2
   dashCooldown: 1
-  attackMovePercent: 0.25
+  attackMovePercent: 0.3
   attacks:
   - {fileID: 4045075886159404200, guid: a9b2e71ffafa104448ed988451c2f1aa, type: 3}
   - {fileID: -839228454640597260, guid: a9a6899c71c6b0041bcf0f43914a4f7f, type: 3}
@@ -4665,7 +4665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 40
   healthBar: {fileID: 8158231299891536013}
-  invincibleTime: 1
+  invincibleTime: 1.5
   modelObjs:
   - {fileID: 7547847856427623827}
   - {fileID: 6705720362100060400}
@@ -4719,6 +4719,7 @@ MonoBehaviour:
   winText: {fileID: 5686139473751439165}
   winPanel: {fileID: 6040948908169219713}
   basicPanel: {fileID: 7970514551049540553}
+  cam: {fileID: 0}
 --- !u!1 &9175054753095592463
 GameObject:
   m_ObjectHideFlags: 0

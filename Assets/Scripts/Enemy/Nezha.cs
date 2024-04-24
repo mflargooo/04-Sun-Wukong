@@ -87,7 +87,7 @@ public class Nezha : MonoBehaviour, IDamageable
         health -= damage;
 
         healthBar.value = health / maxHealth;
-        if (healthBar.value <= 0f)
+        if (health <= .1f)
         {
             End();
             return;

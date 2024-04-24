@@ -11,6 +11,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private TMP_Text winText;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject basicPanel;
+    [SerializeField] private GameObject cam;
 
     private bool win = false;
     // Start is called before the first frame update
@@ -29,7 +30,7 @@ public class PlayerStats : MonoBehaviour
 
     public void Win()
     {
-        SceneManager.MoveGameObjectToScene(transform.parent.gameObject, SceneManager.GetActiveScene());
+        SceneManager.MoveGameObjectToScene(transform.root.gameObject, SceneManager.GetActiveScene());
         win = true;
         winText.text = "time taken: " + onScreenTime.text;
         onScreenTime.gameObject.SetActive(false);
