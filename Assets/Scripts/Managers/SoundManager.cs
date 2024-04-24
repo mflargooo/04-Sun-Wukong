@@ -45,6 +45,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioClip spinningWhooshSound;
     [SerializeField] private AudioSource spinningWhooshSource;
 
+    [SerializeField] private AudioClip nezhaLaughSound;
+    [SerializeField] private AudioSource nezhaLaughSource;
+
     private void Start()
     {
         if (!instance)
@@ -110,5 +113,9 @@ public class SoundManager : MonoBehaviour
     public void PlaySpinningWhooshSound()
     {
         spinningWhooshSource.PlayOneShot(spinningWhooshSound);
+    }
+    public void PlayNezhaLaugh()
+    {
+        nezhaLaughSource.PlayOneShot(nezhaLaughSound);
     }
 }

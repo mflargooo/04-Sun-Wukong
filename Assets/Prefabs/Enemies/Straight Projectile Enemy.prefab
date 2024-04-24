@@ -91,6 +91,7 @@ MonoBehaviour:
   - {fileID: 6606546207009889757}
   - {fileID: 2764896584200414946}
   - {fileID: 7395858254661631320}
+  ragdoll: {fileID: 4776947416630856432, guid: c11c0b413e9db0e488d3e8e098e9472e, type: 3}
   maxHealth: 9
   wanderRadius: 3
   wanderSpeed: 3

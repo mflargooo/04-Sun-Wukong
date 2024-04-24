@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
     [Header("Model")]
     [SerializeField] private Renderer[] modelObjs;
+    [SerializeField] private GameObject ragdoll;
 
     protected RaycastHit hit;
     protected bool isLOS;
@@ -70,6 +71,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
     protected virtual void Update()
     {
+        if (!player) return;
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         if (enemyToPlayer.magnitude > 2 * attackRange && isAttacking != null) EndAttack();
         isLOS = Physics.Raycast(transform.position, enemyToPlayer.normalized, out hit, aggroRange, (1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ground"))) && hit.collider.tag == "Player";
@@ -120,6 +122,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
     public void End() 
     {
+        FindObjectOfType<SpawnManager>().RemoveEnemy(id);
+        Instantiate(ragdoll, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 
@@ -137,7 +141,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
         agent.speed = wanderSpeed;
 
-        while (true)
+        while (player)
         {
             if ((target - transform.position).sqrMagnitude < .01f)
             {
@@ -164,7 +168,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     {
         float rat = relieveAggroTime;
         float lockOnAngle = 0f;
-        while (true)
+        while (player)
         {
             if (!isLOS)
             {
@@ -228,11 +232,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
         yield return new WaitForSeconds(attackSpeed);
         baseMaintainDistRange = maintainDistRange;
         canAttack = true;
-    }
-
-    private void OnDestroy()
-    {
-        FindObjectOfType<SpawnManager>().RemoveEnemy(id);
     }
 
     public virtual void DoAttack()

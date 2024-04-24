@@ -92,7 +92,7 @@ public class SpawnManager : MonoBehaviour
     {
         currentEnemyCount = NumTotalEnemiesBasedOnWave(waveCount);
 
-        if (wave == lastWave)
+        if (1 == lastWave)
         {
             currentEnemyCount = 1;
             Instantiate(nezha, transform.position, nezha.transform.rotation);

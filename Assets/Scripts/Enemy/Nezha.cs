@@ -54,6 +54,7 @@ public class Nezha : MonoBehaviour, IDamageable
     private NezhaProjectile proj;
 
     [SerializeField] private Renderer[] modelObjs;
+    [SerializeField] private GameObject ragdoll;
 
     private void Awake()
     {
@@ -73,6 +74,7 @@ public class Nezha : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (!player) return;
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         if (agent.enabled)
         {
@@ -85,9 +87,10 @@ public class Nezha : MonoBehaviour, IDamageable
         health -= damage;
 
         healthBar.value = health / maxHealth;
-        if (health <= 0f)
+        if (healthBar.value <= 0f)
         {
             End();
+            return;
         }
         StartCoroutine(Flash());
     }
@@ -98,7 +101,7 @@ public class Nezha : MonoBehaviour, IDamageable
        {
            rend.enabled = false;
        }
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.2f);
         foreach (Renderer rend in modelObjs)
         {
             rend.enabled = true;
@@ -107,9 +110,21 @@ public class Nezha : MonoBehaviour, IDamageable
 
     public void End()
     {
-        Destroy(gameObject);
+        StartCoroutine(EndGame());
     }
 
+    IEnumerator EndGame()
+    {
+        player.GetComponent<PlayerStats>().Win();
+        Instantiate(ragdoll, transform.position, transform.rotation);
+        FindObjectOfType<SpawnManager>().RemoveEnemy("Nezha");
+        if (proj)
+        {
+            Destroy(proj.gameObject);
+        }
+        yield return null;
+        Destroy(gameObject);
+    }
     private void NextState(IEnumerator next)
     {
         StopCoroutine(state);
@@ -136,7 +151,7 @@ public class Nezha : MonoBehaviour, IDamageable
             yield return null;
             agent.enabled = true;
         }
-        while (true)
+        while (player)
         {
             if (health / maxHealth <= .75f)
             {
@@ -205,7 +220,7 @@ public class Nezha : MonoBehaviour, IDamageable
         float lockOnAngle = 0f;
         float mag = 0f;
         agent.speed = chaseSpeed;
-        while (true)
+        while (player)
         {
             if (health / maxHealth <= .5f)
             {
@@ -292,7 +307,7 @@ public class Nezha : MonoBehaviour, IDamageable
         float lockOnAngle = 0f;
         float mag = 0f;
         agent.speed = chaseSpeed;
-        while (true)
+        while (player)
         {
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
@@ -446,16 +461,6 @@ public class Nezha : MonoBehaviour, IDamageable
         agent.enabled = true;
         EndAttack();
     }
-
-    void OnDestroy()
-    {
-        FindObjectOfType<SpawnManager>().RemoveEnemy("Nezha");
-        if (proj)
-        {
-            Destroy(proj.gameObject);
-        }
-    }
-
     private void SummonProjectile()
     {
         proj = Instantiate(throwProjectilePrefab, spawnProjLoc.position, throwProjectilePrefab.transform.rotation);
