@@ -28,6 +28,7 @@ public class Nezha : MonoBehaviour, IDamageable
     [SerializeField] private float chaseSpeed;
     [SerializeField] protected float meleeAttackRange;
     [SerializeField] protected float rangedAttackRange;
+    [SerializeField] protected float maintainDistRange;
     [SerializeField] protected float attackCDOfMelee;
     [SerializeField] protected float attackCDOfSpear;
     [SerializeField] protected float attackCDOfRanged;
@@ -37,6 +38,8 @@ public class Nezha : MonoBehaviour, IDamageable
     private bool canSpearAttack = true;
     private bool canRangedAttack = true;
     private bool canGroundAttack = true;
+
+    private float attackCD = 0;
 
     protected float health;
 
@@ -127,20 +130,37 @@ public class Nezha : MonoBehaviour, IDamageable
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-            if (agent.enabled)
-                agent.SetDestination(player.transform.position);
-            if (mag > meleeAttackRange)
+            if (attackCD > 0f)
             {
-                agent.updateRotation = true;
-            }
-            else
-            {
-                agent.updateRotation = false;
-                if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
-                else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                attackCD -= Time.deltaTime;
             }
 
-            if (isAttacking == null && lockOnAngle < .2f && mag <= meleeAttackRange && canMeleeAttack)
+            if (agent.enabled)
+            {
+                if (attackCD <= 0f)
+                {
+                    if (mag > meleeAttackRange)
+                    {
+                        agent.updateRotation = false;
+                        if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    }
+                    else
+                    {
+                        agent.updateRotation = true;
+                    }
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    agent.updateRotation = false;
+                    if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                    else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    agent.SetDestination(player.transform.position - enemyToPlayer.normalized * maintainDistRange);
+                }
+            }
+
+            if (isAttacking == null && lockOnAngle <= .2f && mag <= meleeAttackRange && canMeleeAttack && attackCD <= 0f)
             {
                 rb.velocity = Vector3.zero;
                 agent.SetDestination(transform.position);
@@ -168,20 +188,37 @@ public class Nezha : MonoBehaviour, IDamageable
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-            if (agent.enabled)
-                agent.SetDestination(player.transform.position);
-            if (mag > meleeAttackRange)
+            if (attackCD > 0f)
             {
-                agent.updateRotation = true;
-            }
-            else
-            {
-                agent.updateRotation = false;
-                if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
-                else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                attackCD -= Time.deltaTime;
             }
 
-            if (isAttacking == null && lockOnAngle < .2f)
+            if (agent.enabled)
+            {
+                if (attackCD <= 0f)
+                {
+                    if (mag > meleeAttackRange)
+                    {
+                        agent.updateRotation = false;
+                        if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    }
+                    else
+                    {
+                        agent.updateRotation = true;
+                    }
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    agent.updateRotation = false;
+                    if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                    else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    agent.SetDestination(player.transform.position - enemyToPlayer.normalized * maintainDistRange);
+                }
+            }
+
+            if (isAttacking == null && lockOnAngle <= .2f && attackCD <= 0f)
             {
                 if (mag <= meleeAttackRange && canMeleeAttack)
                 {
@@ -215,23 +252,41 @@ public class Nezha : MonoBehaviour, IDamageable
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-            agent.SetDestination(player.transform.position);
-            if (mag > meleeAttackRange)
+            if (attackCD > 0f)
             {
-                agent.updateRotation = true;
-            }
-            else
-            {
-                agent.updateRotation = false;
-                if (Mathf.Abs(lockOnAngle) > 2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
-                else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                attackCD -= Time.deltaTime;
             }
 
-            if (isAttacking == null && lockOnAngle < .2f)
+            if (agent.enabled)
+            {
+                if (attackCD <= 0f)
+                {
+                    if (mag > meleeAttackRange)
+                    {
+                        agent.updateRotation = false;
+                        if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                        else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    }
+                    else
+                    {
+                        agent.updateRotation = true;
+                    }
+                    agent.SetDestination(player.transform.position);
+                }
+                else
+                {
+                    agent.updateRotation = false;
+                    if (Mathf.Abs(lockOnAngle) > .2f) transform.Rotate(transform.up, lockOnAngle * 20f * Time.deltaTime);
+                    else transform.rotation = Quaternion.LookRotation(enemyToPlayer, transform.up);
+                    agent.SetDestination(player.transform.position - enemyToPlayer.normalized * maintainDistRange);
+                }
+            }
+
+            if (isAttacking == null && lockOnAngle <= .2f && attackCD <= 0f)
             {
                 if (mag <= meleeAttackRange)
                 {
-                    if (Random.Range(0, 1) < .6f && canMeleeAttack)
+                    if (Random.Range(0, 1) < .8f && canMeleeAttack)
                     {
                         rb.velocity = Vector3.zero;
                         if (agent.enabled)
@@ -253,6 +308,13 @@ public class Nezha : MonoBehaviour, IDamageable
                         if (agent.enabled)
                             agent.SetDestination(transform.position);
                         isAttacking = StartCoroutine(Attack(1, 3));
+                    }
+                    else if (canSpearAttack)
+                    {
+                        rb.velocity = Vector3.zero;
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
+                        isAttacking = StartCoroutine(Attack(2, 3));
                     }
                 }
             }
@@ -304,15 +366,16 @@ public class Nezha : MonoBehaviour, IDamageable
                 anim.Play("spin_start");
                 yield return new WaitForSeconds(spinStartAnim.length);
                 SoundManager.instance.PlaySpinningWhooshSound();
+                yield return new WaitForSeconds(1f);
                 foreach (ParticleSystem ps in spinSpearParticles)
                 {
                     if (!ps.isPlaying && ps.isStopped) ps.Play();
-                    ps.time = 0;
                 }
-                yield return new WaitForSeconds(spinSpearTime);
+                yield return new WaitForSeconds(spinSpearTime - 1f);
                 foreach (ParticleSystem ps in spinSpearParticles)
                 {
                     if (!ps.isStopped && ps.isPlaying) ps.Stop();
+                    ps.time = 0;
                 }
                 anim.SetBool("DoSpinAttack", false);
 
@@ -329,6 +392,10 @@ public class Nezha : MonoBehaviour, IDamageable
     void OnDestroy()
     {
         FindObjectOfType<SpawnManager>().RemoveEnemy("Nezha");
+        if (proj)
+        {
+            Destroy(proj.gameObject);
+        }
     }
 
     private void SummonProjectile()
@@ -339,21 +406,25 @@ public class Nezha : MonoBehaviour, IDamageable
 
     IEnumerator DoMeleeCooldown()
     {
+        attackCD = 2f;
         yield return new WaitForSeconds(attackCDOfMelee);
         canMeleeAttack = true;
     }
     IEnumerator DoRangedCooldown()
     {
+        attackCD = 1f;
         yield return new WaitForSeconds(attackCDOfRanged);
         canRangedAttack = true;
     }
     IEnumerator DoSpearCooldown()
     {
+        attackCD = 2f;
         yield return new WaitForSeconds(attackCDOfSpear);
         canSpearAttack = true;
     }
     IEnumerator DoGroundCooldown()
     {
+        attackCD = 1f;
         yield return new WaitForSeconds(attackCDOfGround);
         canGroundAttack = true;
     }

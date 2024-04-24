@@ -8,7 +8,7 @@ public class MeleeEnemy : Enemy
     protected override IEnumerator Attack()
     {
         anim.Play("attack");
-        yield return new WaitForSeconds(attackAnim.length + .2f);
+        yield return new WaitForSeconds(attackAnim.length);
         EndAttack();
     }
 }

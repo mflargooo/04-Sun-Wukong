@@ -64,14 +64,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.6035129
+      - time: 0.5783732
         functionName: SetPlayerAttackBoxActive
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 1
         messageOptions: 0
-      - time: 0.849296
+      - time: 0.92750823
         functionName: SetPlayerAttackBoxActive
         data: 
         objectReferenceParameter: {instanceID: 0}

@@ -28,6 +28,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     [SerializeField] protected float chaseSpeed;
     [SerializeField] protected float relocateSpeed;
     [SerializeField] protected float maintainDistRange;
+    [SerializeField] protected float afterAttackMaintainDistRange;
+    protected float baseMaintainDistRange;
     [SerializeField] protected float aggroRange;
     [SerializeField] protected float relieveAggroTime;
     [SerializeField] protected float attackRange;
@@ -49,6 +51,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     protected Coroutine isAttacking;
     protected Coroutine isKnockingback;
 
+    protected bool canAttack = true;
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -57,6 +61,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
         homePos = transform.position;
         state = StartCoroutine(Aggro());
+
+        baseMaintainDistRange = maintainDistRange;
     }
 
     protected virtual void Update()
@@ -161,7 +167,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
                 rat = relieveAggroTime;
                 lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-                if (enemyToPlayer.sqrMagnitude > attackRange * attackRange)
+                if (enemyToPlayer.sqrMagnitude >= attackRange * attackRange && (canAttack || enemyToPlayer.sqrMagnitude > baseMaintainDistRange * baseMaintainDistRange))
                 {
                     agent.SetDestination(player.transform.position);
                     agent.updateRotation = true;
@@ -169,25 +175,25 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
                 }
                 else
                 {
-                    if (enemyToPlayer.sqrMagnitude < maintainDistRange * maintainDistRange)
+                    if (enemyToPlayer.sqrMagnitude < baseMaintainDistRange * baseMaintainDistRange)
                     {
-                        agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - maintainDistRange));
+                        agent.SetDestination(transform.position + enemyToPlayer.normalized * (enemyToPlayer.magnitude - baseMaintainDistRange) / (enemyToPlayer.magnitude + 1));
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
+                        if (Mathf.Abs(lockOnAngle) >= .1f) transform.Rotate(transform.up, lockOnAngle * 5f * Time.deltaTime);
                         
                         agent.speed = relocateSpeed;
-                        if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
+                        if (isAttacking == null && lockOnAngle < .2f && canAttack) isAttacking = StartCoroutine(Attack());
                     }
                     else
                     {
                         agent.updateRotation = false;
 
-                        if (Mathf.Abs(lockOnAngle) >= .2f) transform.Rotate(transform.up, lockOnAngle * 2f * Time.deltaTime);
+                        if (Mathf.Abs(lockOnAngle) >= .1f) transform.Rotate(transform.up, lockOnAngle * 2f * Time.deltaTime);
 
                         agent.SetDestination(transform.position);
 
-                        if (isAttacking == null && lockOnAngle < .2f) isAttacking = StartCoroutine(Attack());
+                        if (isAttacking == null && lockOnAngle < .2f && canAttack) isAttacking = StartCoroutine(Attack());
                     }
                 }
             }
@@ -197,6 +203,15 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
             yield return null;
         }
+    }
+
+    public IEnumerator Cooldown()
+    {
+        canAttack = false;
+        baseMaintainDistRange = afterAttackMaintainDistRange;
+        yield return new WaitForSeconds(attackSpeed);
+        baseMaintainDistRange = maintainDistRange;
+        canAttack = true;
     }
 
     private void OnDestroy()
@@ -219,6 +234,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
     {
         StopCoroutine(isAttacking);
         isAttacking = null;
+        StartCoroutine(Cooldown());
     }
 
     private void OnDrawGizmos()

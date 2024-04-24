@@ -83,6 +83,7 @@ MonoBehaviour:
   chaseSpeed: 4
   relocateSpeed: 1
   maintainDistRange: 10
+  afterAttackMaintainDistRange: 10
   aggroRange: 30
   relieveAggroTime: 4
   attackRange: 12
@@ -156,7 +157,7 @@ MonoBehaviour:
   - {fileID: 7622983069441011279, guid: 3496905700ccc864295a8f36de209133, type: 3}
   probabilties:
   - 0.1
-  launchSpeed: 10
+  launchSpeed: 3
 --- !u!1 &5786447996425264964
 GameObject:
   m_ObjectHideFlags: 0
