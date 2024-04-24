@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -223,7 +223,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.5754717, g: 0, b: 0.47391778, a: 1}
+      maxColor: {r: 0.7881124, g: 0.3389818, b: 0.8679245, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -287,8 +287,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.6
-      minScalar: 0.3
+      scalar: 0.3
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1444,8 +1444,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   UVModule:
     serializedVersion: 2
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -1503,8 +1503,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startFrame:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 0.9999
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -1559,11 +1559,16 @@ ParticleSystem:
     tilesY: 1
     animationType: 0
     rowIndex: 0
-    cycles: 1
+    cycles: 4
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: -1307197875, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1879065130, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1447513611, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 581668036, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 868018369, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -241262043, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -4982,8 +4987,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9073562, g: 0.51320755, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 8edf8c69748509743be78fd1fea77cf9, type: 3}
+  m_Color: {r: 1, g: 0.63584906, b: 0.9535886, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5257,7 +5262,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0, b: 0.8230963, a: 1}
+      maxColor: {r: 0.9778934, g: 0.60754716, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5321,8 +5326,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.6
-      minScalar: 0.3
+      scalar: 0.3
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -6420,8 +6425,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   UVModule:
     serializedVersion: 2
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -6479,8 +6484,8 @@ ParticleSystem:
         m_RotationOrder: 4
     startFrame:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
+      minMaxState: 3
+      scalar: 0.9999
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -6535,11 +6540,16 @@ ParticleSystem:
     tilesY: 1
     animationType: 0
     rowIndex: 0
-    cycles: 1
+    cycles: 4
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: -1307197875, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1879065130, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1447513611, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 581668036, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 868018369, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -241262043, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:

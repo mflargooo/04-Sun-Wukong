@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Nezha : MonoBehaviour, IDamageable
 {
@@ -39,6 +40,8 @@ public class Nezha : MonoBehaviour, IDamageable
 
     protected float health;
 
+    [SerializeField] protected Slider healthBar;
+
     protected Coroutine state;
     private Coroutine isAttacking;
 
@@ -52,13 +55,12 @@ public class Nezha : MonoBehaviour, IDamageable
 
         enemyToPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
         rb = GetComponent<Rigidbody>();
+        healthBar.value = 1;
 
         foreach (ParticleSystem ps in spinSpearParticles)
         {
             if (!ps.isStopped) ps.Stop();
         }
-
-        state = StartCoroutine(PhaseOne());
     }
 
     private void Update()
@@ -68,12 +70,17 @@ public class Nezha : MonoBehaviour, IDamageable
         {
             rb.velocity = Vector3.zero;
         }
+        else
+        {
+            transform.rotation = Quaternion.LookRotation(enemyToPlayer, Vector3.up);
+        }
     }
 
     public void Damage(float damage)
     {
         health -= damage;
 
+        healthBar.value = health / maxHealth;
         if (health <= 0f)
         {
             End();
@@ -91,6 +98,11 @@ public class Nezha : MonoBehaviour, IDamageable
         state = StartCoroutine(next);
     }
 
+    public void StartNezha()
+    {
+        state = StartCoroutine(PhaseOne());
+    }
+
     private IEnumerator PhaseOne()
     {
         agent.enabled = true;
@@ -99,6 +111,13 @@ public class Nezha : MonoBehaviour, IDamageable
         float lockOnAngle = 0f;
         float mag = 0f;
         agent.speed = chaseSpeed;
+        int attempts = 0;
+        while(!agent.isOnNavMesh && attempts < 500)
+        {
+            agent.enabled = false;
+            yield return null;
+            agent.enabled = true;
+        }
         while (true)
         {
             if (health / maxHealth <= .75f)
@@ -108,7 +127,8 @@ public class Nezha : MonoBehaviour, IDamageable
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-            agent.SetDestination(player.transform.position);
+            if (agent.enabled)
+                agent.SetDestination(player.transform.position);
             if (mag > meleeAttackRange)
             {
                 agent.updateRotation = true;
@@ -148,7 +168,8 @@ public class Nezha : MonoBehaviour, IDamageable
             mag = enemyToPlayer.magnitude;
             lockOnAngle = Vector3.SignedAngle(transform.forward, enemyToPlayer, Vector3.up);
 
-            agent.SetDestination(player.transform.position);
+            if (agent.enabled)
+                agent.SetDestination(player.transform.position);
             if (mag > meleeAttackRange)
             {
                 agent.updateRotation = true;
@@ -165,13 +186,15 @@ public class Nezha : MonoBehaviour, IDamageable
                 if (mag <= meleeAttackRange && canMeleeAttack)
                 {
                     rb.velocity = Vector3.zero;
-                    agent.SetDestination(transform.position);
+                    if (agent.enabled)
+                        agent.SetDestination(transform.position);
                     isAttacking = StartCoroutine(Attack(0, 2));
                 }
                 else if(mag <= rangedAttackRange && !proj && canRangedAttack)
                 {
                     rb.velocity = Vector3.zero;
-                    agent.SetDestination(transform.position);
+                    if (agent.enabled)
+                        agent.SetDestination(transform.position);
                     isAttacking = StartCoroutine(Attack(1, 2));
                 }
             }
@@ -182,7 +205,6 @@ public class Nezha : MonoBehaviour, IDamageable
 
     private IEnumerator PhaseThree()
     {
-        agent.enabled = true;
         print("STARTING PHASE THRHEE");
 
         float lockOnAngle = 0f;
@@ -212,13 +234,15 @@ public class Nezha : MonoBehaviour, IDamageable
                     if (Random.Range(0, 1) < .6f && canMeleeAttack)
                     {
                         rb.velocity = Vector3.zero;
-                        agent.SetDestination(transform.position);
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
                         isAttacking = StartCoroutine(Attack(0, 3));
                     }
                     else if (canSpearAttack)
                     {
                         rb.velocity = Vector3.zero;
-                        agent.SetDestination(transform.position);
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
                         isAttacking = StartCoroutine(Attack(2, 3));
                     }
                 }
@@ -226,7 +250,8 @@ public class Nezha : MonoBehaviour, IDamageable
                 {
                     if (Random.Range(0, 1) < .6f && !proj && canRangedAttack)
                     {
-                        agent.SetDestination(transform.position);
+                        if (agent.enabled)
+                            agent.SetDestination(transform.position);
                         isAttacking = StartCoroutine(Attack(1, 3));
                     }
                 }
@@ -244,8 +269,6 @@ public class Nezha : MonoBehaviour, IDamageable
         {
             case 0:
                 canMeleeAttack = false;
-
-                agent.enabled = false;
                 rb.velocity = Vector3.zero;
 
                 Vector3 attackDir = enemyToPlayer.normalized;
@@ -269,8 +292,6 @@ public class Nezha : MonoBehaviour, IDamageable
                 break;
             case 1:
                 canRangedAttack = false;
-
-                agent.enabled = false;
                 anim.Play("throw");
                 yield return new WaitForSeconds(.05f);
                 SummonProjectile();
@@ -279,14 +300,14 @@ public class Nezha : MonoBehaviour, IDamageable
                 break;
             case 2:
                 canSpearAttack = false;
-
-                agent.enabled = false;
                 anim.SetBool("DoSpinAttack", true);
                 anim.Play("spin_start");
                 yield return new WaitForSeconds(spinStartAnim.length);
+                SoundManager.instance.PlaySpinningWhooshSound();
                 foreach (ParticleSystem ps in spinSpearParticles)
                 {
                     if (!ps.isPlaying && ps.isStopped) ps.Play();
+                    ps.time = 0;
                 }
                 yield return new WaitForSeconds(spinSpearTime);
                 foreach (ParticleSystem ps in spinSpearParticles)

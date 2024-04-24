@@ -17,6 +17,8 @@ public class NezhaProjectile : MonoBehaviour
     private void Update()
     {
         model.transform.Rotate(Vector3.up * rotateVelocity * Time.deltaTime);
+        model.transform.Rotate(Vector3.right * rotateVelocity * Time.deltaTime);
+        model.transform.Rotate(Vector3.forward * rotateVelocity * Time.deltaTime);
     }
 
     public void BoomerangTo(Transform returnLoc, Vector3 targetPos)
@@ -54,6 +56,7 @@ public class NezhaProjectile : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBTWPulses);
             if (!pulse.isPlaying) pulse.Play();
+            SoundManager.instance.PlayPulseSound();
             float timer = .001f;
             pulseCollider.enabled = true;
             while (timer < timeTilMaxPulseDist)

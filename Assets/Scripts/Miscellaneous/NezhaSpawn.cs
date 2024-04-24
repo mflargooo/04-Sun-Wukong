@@ -12,6 +12,7 @@ public class NezhaSpawn : MonoBehaviour
 
     private void Start()
     {
+        thingToSummon.GetComponent<NavMeshAgent>().enabled = false;
         foreach (Collider collider in collidersToEnable)
         {
             collider.enabled = false;
@@ -33,6 +34,8 @@ public class NezhaSpawn : MonoBehaviour
         {
             script.enabled = true;
         }
+        thingToSummon.GetComponent<NavMeshAgent>().enabled = true;
+        thingToSummon.GetComponent<Nezha>().StartNezha();
         Destroy(gameObject, 2f);
     }
 }

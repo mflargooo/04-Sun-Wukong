@@ -8,6 +8,7 @@ public class IsometricPlayerController3D : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Animator anim;
+    [SerializeField] private LineRenderer tail;
     private Rigidbody rb;
 
     [Header("Controls")]
@@ -30,6 +31,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     [SerializeField] private Collider attackCollider;
     private const int MAX_COMBO = 3;
 
+
     private Ray mouseRay;
 
     public Vector3 input { get; private set; }
@@ -48,6 +50,7 @@ public class IsometricPlayerController3D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         rb = GetComponent<Rigidbody>();
         cosInputRot = Mathf.Cos(inputRotationRad);
         sinInputRot = Mathf.Sin(inputRotationRad);
@@ -73,6 +76,9 @@ public class IsometricPlayerController3D : MonoBehaviour
         {
             dashCD -= Time.deltaTime;
         }
+
+        tail.SetPosition(0, modelTransform.GetChild(0).GetChild(2).GetChild(3).position);
+        tail.SetPosition(1, modelTransform.GetChild(0).GetChild(2).GetChild(3).position - modelTransform.forward * .75f - Vector3.up * .25f);
     }
 
     IEnumerator Movement()

@@ -8,12 +8,12 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void PlayFootstep()
     {
-        SoundManager.PlayFootstep();
+        SoundManager.instance.PlayFootstep();
     }
 
     public void PlayPlayerSwing()
     {
-        SoundManager.PlayPlayerSwing();
+        SoundManager.instance.PlayPlayerSwing();
     }
 
     public void SetPlayerAttackBoxActive(int b)
@@ -23,6 +23,6 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     public void PlayConnectedAttack()
     {
-        SoundManager.PlayConnectedAttack();
+        SoundManager.instance.PlayConnectedAttack();
     }
 }

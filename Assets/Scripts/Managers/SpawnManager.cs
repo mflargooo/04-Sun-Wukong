@@ -56,14 +56,15 @@ public class SpawnManager : MonoBehaviour
 
     int NumTotalEnemiesBasedOnWave(int wave)
     {
-        return baseTotalEnemyCount + (int) (wave * wave / 49 + .75f);
+        return baseTotalEnemyCount + (int) (wave * .5f);
     }
     
     private IEnumerator SpawnWave(bool playEnd)
     {
+        yield return new WaitForSeconds(1f);
         if (playEnd)
         {
-            SoundManager.PlayCheer();
+            SoundManager.instance.PlayCheer();
             yield return new WaitForSeconds(3f);
         }
         if (waveCount == lastWave)
@@ -72,13 +73,13 @@ public class SpawnManager : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(.2f);
             waveCount++;
             if (lastWave > 1)
             {
                 waveText.text = "V@UD " + waveCount.ToString();
                 waveText.gameObject.SetActive(true);
-                SoundManager.PlayGong();
+                SoundManager.instance.PlayGong();
                 yield return new WaitForSeconds(3f);
                 waveText.gameObject.SetActive(false);
                 yield return null;
@@ -91,7 +92,7 @@ public class SpawnManager : MonoBehaviour
     {
         currentEnemyCount = NumTotalEnemiesBasedOnWave(waveCount);
 
-        if (wave == 10)
+        if (wave == lastWave)
         {
             currentEnemyCount = 1;
             Instantiate(nezha, transform.position, nezha.transform.rotation);

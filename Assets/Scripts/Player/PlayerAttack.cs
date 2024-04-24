@@ -10,7 +10,7 @@ public class PlayerAttack : MonoBehaviour
         if (other.TryGetComponent<IDamageable>(out IDamageable dmg))
         {
             dmg.Damage(damage);
-            SoundManager.PlayConnectedAttack();
+            SoundManager.instance.PlayConnectedAttack();
         }       
 
         if (other.TryGetComponent<IKnockbackable>(out IKnockbackable kb))

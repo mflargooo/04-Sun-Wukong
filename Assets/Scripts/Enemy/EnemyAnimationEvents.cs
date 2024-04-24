@@ -24,6 +24,26 @@ public class EnemyAnimationEvents : MonoBehaviour
 
     public void PlaySwooshSound()
     {
-        SoundManager.PlayMeleeSwoosh();
+        SoundManager.instance.PlayMeleeSwoosh();
+    }
+
+    public void PlayMetalSwoosh()
+    {
+        SoundManager.instance.PlayMetalSwoosh();
+    }
+
+    public void PlayThrowSound()
+    {
+        SoundManager.instance.PlayThrowSound();
+    }
+
+    public void PlayBowPullbackSound()
+    {
+        SoundManager.instance.PlayBowPullbackSound();
+    }
+
+    public void PlayBowReleaseSound()
+    {
+        SoundManager.instance.PlayBowReleaseSound();
     }
 }

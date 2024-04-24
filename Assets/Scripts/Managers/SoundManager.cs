@@ -4,83 +4,111 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    private SoundManager instance;
+    public static SoundManager instance;
 
     [SerializeField] private AudioClip[] footsteps;
     [SerializeField] private AudioSource footstepsSource;
-    private static AudioClip[] ftsps;
-    private static AudioSource ftspsSrc;
 
     [SerializeField] private AudioClip[] playerSwings;
     [SerializeField] private AudioSource playerSwingsSource;
-    private static AudioClip[] pss;
-    private static AudioSource pssSrc;
 
     [SerializeField] private AudioClip[] connectedAttacks;
     [SerializeField] private AudioSource connectedAttackSource;
-    private static AudioClip[] cas;
-    private static AudioSource caSrc;
 
     [SerializeField] private AudioClip[] meleeSwoosh;
     [SerializeField] private AudioSource meleeSwooshSource;
-    private static AudioClip[] mss;
-    private static AudioSource msSrc;
 
     [SerializeField] private AudioClip gong;
     [SerializeField] private AudioSource gongSource;
-    private static AudioClip gs;
-    private static AudioSource gsSrc;
 
     [SerializeField] private AudioClip cheer;
     [SerializeField] private AudioSource cheerSource;
-    private static AudioClip chs;
-    private static AudioSource chsSrc;
+
+    [SerializeField] private AudioClip healthPickup;
+    [SerializeField] private AudioSource healthPickupSource;
+
+    [SerializeField] private AudioClip metalSwooshSound;
+    [SerializeField] private AudioSource metalSwooshSource;
+
+    [SerializeField] private AudioClip throwSound;
+    [SerializeField] private AudioSource throwSource;
+
+    [SerializeField] private AudioClip[] bowPullbackSound;
+    [SerializeField] private AudioSource bowPullbackSource;
+
+    [SerializeField] private AudioClip[] bowReleaseSound;
+    [SerializeField] private AudioSource bowReleaseSource;
+
+    [SerializeField] private AudioClip pulseSound;
+    [SerializeField] private AudioSource pulseSource;
+
+    [SerializeField] private AudioClip spinningWhooshSound;
+    [SerializeField] private AudioSource spinningWhooshSource;
 
     private void Start()
     {
         if (!instance)
             instance = this;
         else
-            Destroy(gameObject);
-
-        ftsps = footsteps;
-        ftspsSrc = footstepsSource;
-        pss = playerSwings;
-        pssSrc = playerSwingsSource;
-        cas = connectedAttacks;
-        caSrc = connectedAttackSource;
-        mss = meleeSwoosh;
-        msSrc = meleeSwooshSource;
-        gs = gong;
-        gsSrc = gongSource;
-        chs = cheer;
-        chsSrc = cheerSource;
+            Destroy(this);
     }
-    public static void PlayFootstep()
+    public void PlayFootstep()
     {
-        ftspsSrc.PlayOneShot(ftsps[Random.Range(0, ftsps.Length)]);
+        footstepsSource.PlayOneShot(footsteps[Random.Range(0, footsteps.Length)]);
     }
 
-    public static void PlayPlayerSwing()
+    public void PlayPlayerSwing()
     {
-        pssSrc.PlayOneShot(pss[Random.Range(0, pss.Length)]);
+        playerSwingsSource.PlayOneShot(playerSwings[Random.Range(0, playerSwings.Length)]);
     }
-    public static void PlayConnectedAttack()
+    public void PlayConnectedAttack()
     {
-        caSrc.PlayOneShot(cas[Random.Range(0, cas.Length)]);
-    }
-
-    public static void PlayMeleeSwoosh()
-    {
-        msSrc.PlayOneShot(mss[Random.Range(0, mss.Length)]);
+        connectedAttackSource.PlayOneShot(connectedAttacks[Random.Range(0, connectedAttacks.Length)]);
     }
 
-    public static void PlayGong()
+    public void PlayMeleeSwoosh()
     {
-        gsSrc.PlayOneShot(gs);
+        meleeSwooshSource.PlayOneShot(meleeSwoosh[Random.Range(0, meleeSwoosh.Length)]);
     }
-    public static void PlayCheer()
+
+    public void PlayGong()
     {
-        chsSrc.PlayOneShot(chs);
+        gongSource.PlayOneShot(gong);
+    }
+    public void PlayCheer()
+    {
+        cheerSource.PlayOneShot(cheer);
+    }
+    public void PlayHealthPickup()
+    {
+        healthPickupSource.PlayOneShot(healthPickup);
+    }
+
+    public void PlayMetalSwoosh()
+    {
+        metalSwooshSource.PlayOneShot(metalSwooshSound);
+    }
+    public void PlayThrowSound()
+    {
+        throwSource.PlayOneShot(throwSound);
+    }
+    public void PlayBowPullbackSound()
+    {
+        bowPullbackSource.PlayOneShot(bowPullbackSound[Random.Range(0, bowPullbackSound.Length)]);
+    }
+
+    public void PlayBowReleaseSound()
+    {
+        bowReleaseSource.PlayOneShot(bowReleaseSound[Random.Range(0, bowReleaseSound.Length)]);
+    }
+
+    public void PlayPulseSound()
+    {
+        pulseSource.PlayOneShot(pulseSound);
+    }
+
+    public void PlaySpinningWhooshSound()
+    {
+        spinningWhooshSource.PlayOneShot(spinningWhooshSound);
     }
 }

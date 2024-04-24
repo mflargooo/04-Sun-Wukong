@@ -401,6 +401,6 @@ MonoBehaviour:
   - {fileID: 6638077682818569057, guid: e5e0f93e9e3443f45ac5f7fc694caf67, type: 3}
   nezha: {fileID: 8033466705987366567, guid: 111649785f3bfc9488b8b68d5a918300, type: 3}
   spawnRadius: 10
-  minDistBetweenSpawns: 2
+  minDistBetweenSpawns: 4
   lastWave: 5
   waveText: {fileID: 3069609387962041929}
