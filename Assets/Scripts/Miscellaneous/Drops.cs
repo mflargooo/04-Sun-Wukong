@@ -14,7 +14,7 @@ public class Drops : MonoBehaviour
         
     }
 
-    private void OnDestroy()
+    public void Drop()
     {
         for (int i = 0; i < drops.Length; i++)
         {

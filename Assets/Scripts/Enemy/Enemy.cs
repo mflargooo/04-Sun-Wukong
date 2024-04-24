@@ -122,6 +122,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockbackable
 
     public void End() 
     {
+        GetComponent<Drops>().Drop();
         FindObjectOfType<SpawnManager>().RemoveEnemy(id);
         Instantiate(ragdoll, transform.position, transform.rotation);
         Destroy(gameObject);

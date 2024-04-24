@@ -11,7 +11,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private TMP_Text winText;
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject basicPanel;
-    [SerializeField] private GameObject cam;
 
     private bool win = false;
     // Start is called before the first frame update

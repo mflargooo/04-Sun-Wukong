@@ -10,7 +10,7 @@ public class NezhaSpawn : MonoBehaviour
     [SerializeField] private MonoBehaviour[] scriptsToEnable;
     [SerializeField] private Collider[] collidersToEnable;
 
-    [SerializeField] private Transform player;
+    private Transform player;
 
     private void Start()
     {
