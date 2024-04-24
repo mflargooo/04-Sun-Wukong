@@ -648,6 +648,8 @@ MonoBehaviour:
   - {fileID: 8462553826093325358}
   spinStartAnim: {fileID: -9003243198704934774, guid: cc4a482617c9ab34087e2e05f5f51748, type: 3}
   spinSpearTime: 3.5
+  groundSpearAnim: {fileID: 0}
+  geyserAttack: {fileID: 0}
   chaseSpeed: 4
   meleeAttackRange: 1.3
   rangedAttackRange: 7
@@ -5617,7 +5619,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6458ed3322e7c4ba203ae206c50303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0.4
+  damage: 0.8
   tagToDamage: Player
 --- !u!1 &7240000518929585859
 GameObject:
@@ -10611,7 +10613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f6458ed3322e7c4ba203ae206c50303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0.4
+  damage: 0.8
   tagToDamage: Player
 --- !u!1 &9066812077292884630
 GameObject:
@@ -10638,7 +10640,7 @@ Transform:
   m_GameObject: {fileID: 9066812077292884630}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 1.3}
+  m_LocalPosition: {x: 0, y: -0.5, z: 2.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

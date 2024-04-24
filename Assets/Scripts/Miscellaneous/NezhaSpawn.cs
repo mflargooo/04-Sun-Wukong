@@ -10,6 +10,8 @@ public class NezhaSpawn : MonoBehaviour
     [SerializeField] private MonoBehaviour[] scriptsToEnable;
     [SerializeField] private Collider[] collidersToEnable;
 
+    [SerializeField] private Transform player;
+
     private void Start()
     {
         thingToSummon.GetComponent<NavMeshAgent>().enabled = false;
@@ -21,6 +23,14 @@ public class NezhaSpawn : MonoBehaviour
         {
             script.enabled = false;
         }
+
+        player = FindAnyObjectByType<IsometricPlayerController3D>().transform;
+    }
+
+    private void Update()
+    {
+        Vector3 dir = (player.position - transform.position - Vector3.up * (player.position.y + transform.position.y));
+        transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
     }
 
     private void SummonThing()

@@ -381,8 +381,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 0.5
+      scalar: 0.5
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1462,8 +1462,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
   UVModule:
     serializedVersion: 2
-    enabled: 0
-    mode: 0
+    enabled: 1
+    mode: 1
     timeMode: 0
     fps: 30
     frameOverTime:
@@ -1581,7 +1581,12 @@ ParticleSystem:
     uvChannelMask: -1
     rowMode: 1
     sprites:
-    - sprite: {fileID: 0}
+    - sprite: {fileID: -1307197875, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1879065130, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -1447513611, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 581668036, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: 868018369, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
+    - sprite: {fileID: -241262043, guid: 767cb5262c39e8444b74c557b7d1bd8a, type: 3}
     flipU: 0
     flipV: 0
   VelocityModule:
@@ -4996,6 +5001,7 @@ MonoBehaviour:
   - {fileID: 5183616660091417228}
   collidersToEnable:
   - {fileID: 856210357858722040}
+  player: {fileID: 0}
 --- !u!1001 &3320138209097526348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5004,6 +5010,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7951996177033579242}
     m_Modifications:
+    - target: {fileID: 1433004065336413924, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.91
+      objectReference: {fileID: 0}
     - target: {fileID: 4311735127416290754, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
       propertyPath: m_Name
       value: Nezha
@@ -5056,17 +5066,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6287241302645008717, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
-      propertyPath: damage
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6926840586649104445, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
-      propertyPath: damage
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7558156123973388528, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.1
+    - target: {fileID: 6962957116316601247, guid: 73079946c05602c4182d817b5e47cd2a, type: 3}
+      propertyPath: m_Radius
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5089,7 +5091,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 3320138209097526348}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1568902336213750158}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f925f29968ac67440a41c26781dbe86d, type: 3}
   m_Name: 

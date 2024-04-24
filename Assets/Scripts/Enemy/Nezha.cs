@@ -25,6 +25,9 @@ public class Nezha : MonoBehaviour, IDamageable
     [SerializeField] private AnimationClip spinStartAnim;
     [SerializeField] private float spinSpearTime;
 
+    [SerializeField] private AnimationClip groundSpearAnim;
+    [SerializeField] private GameObject geyserAttack;
+
     [SerializeField] private float chaseSpeed;
     [SerializeField] protected float meleeAttackRange;
     [SerializeField] protected float rangedAttackRange;
@@ -72,10 +75,6 @@ public class Nezha : MonoBehaviour, IDamageable
         if (agent.enabled)
         {
             rb.velocity = Vector3.zero;
-        }
-        else
-        {
-            transform.rotation = Quaternion.LookRotation(enemyToPlayer, Vector3.up);
         }
     }
 
@@ -382,6 +381,10 @@ public class Nezha : MonoBehaviour, IDamageable
                 StartCoroutine(DoSpearCooldown());
                 break;
             case 3:
+                canGroundAttack = false;
+                anim.Play("phase_2_start");
+                yield return new WaitForSeconds(groundSpearAnim.length * 2f);
+                Instantiate(geyserAttack, player.transform.position - (Vector3.up * (player.transform.position.y - .01f)) + player.transform.GetChild(0).transform.forward, transform.rotation);
                 break;
         }
 
