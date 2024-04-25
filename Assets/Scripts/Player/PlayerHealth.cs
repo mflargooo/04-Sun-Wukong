@@ -48,7 +48,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         if (!isInvincible)
         {
             currentHealth -= damage;
-            if(currentHealth <= 0f)
+            UpdateHealthBar();
+            if (currentHealth <= 0f)
             {
                 StartCoroutine(End());
                 return;
@@ -58,7 +59,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
                 StartCoroutine(InvincibleTimer());
             }
             StartCoroutine(DamageIndication());
-            UpdateHealthBar();
         }
     }
 

@@ -15135,6 +15135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6589535543314997864, guid: dfd3ea9dcc9c9b843b37ce654b7c4b75, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6675026957795182328, guid: dfd3ea9dcc9c9b843b37ce654b7c4b75, type: 3}
       propertyPath: lastWave
       value: 3
