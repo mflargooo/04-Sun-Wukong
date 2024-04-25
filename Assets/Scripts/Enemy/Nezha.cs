@@ -263,7 +263,7 @@ public class Nezha : MonoBehaviour, IDamageable
             {
                 if (mag <= meleeAttackRange)
                 {
-                    if (Random.Range(0, 1) < .8f && canMeleeAttack)
+                    if (Random.Range(0f, 1f) < .8f && canMeleeAttack)
                     {
                         rb.velocity = Vector3.zero;
                         if (agent.enabled)
@@ -280,7 +280,7 @@ public class Nezha : MonoBehaviour, IDamageable
                 }
                 else if (meleeAttackRange < mag && mag <= rangedAttackRange)
                 {
-                    if (Random.Range(0, 1) < .6f && !proj && canRangedAttack)
+                    if (Random.Range(0f, 1f) < .6f && !proj && canRangedAttack)
                     {
                         if (agent.enabled)
                             agent.SetDestination(transform.position);
@@ -346,7 +346,7 @@ public class Nezha : MonoBehaviour, IDamageable
             {
                 if (mag <= meleeAttackRange)
                 {
-                    if (Random.Range(0, 1) < .9f && canMeleeAttack)
+                    if (Random.Range(0f, 1f) < .9f && canMeleeAttack)
                     {
                         rb.velocity = Vector3.zero;
                         if (agent.enabled)

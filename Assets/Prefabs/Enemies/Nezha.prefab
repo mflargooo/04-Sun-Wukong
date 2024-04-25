@@ -711,7 +711,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 819962278970066771}
   anim: {fileID: 2546926963461140312}
-  maxHealth: 250
+  maxHealth: 300
   meleeAttacks:
   - {fileID: -5916649853471409691, guid: 23222698bffc7c94e954352bb6371d3c, type: 3}
   - {fileID: -839228454640597260, guid: d80fc69ca79a5404881b1ef6f77105eb, type: 3}
