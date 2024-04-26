@@ -2,13 +2,14 @@
 
 README
 
-        04 Sun Wukong - developed by Hidden Reflection Studios, a 3D isometric, 
-        Chinese Mythology, survival, beat'em up game centered around the story 
-        of Sun Wukong.
+        Battle of Immortals: Sun Wukong v. Nezha - developed by Hidden 
+        Reflection Studios, a 3D isometric, Chinese Mythology, survival, 
+        beat'em up game centered around the story of Sun Wukong.
 
 RUN DIRECTIONS
 
-        Windows: Unzip the file and run the .exe directly in the uzipped folder.
+        Windows: Unzip the file and run the .exe directly in the
+                 unzipped folder.
 
 RELEASE NOTES
 
@@ -65,6 +66,7 @@ RELEASE NOTES
 ATTRIBUTIONS 
 
         () Animations:
+
                 - Male Laying Pose (used on menu) from mixamo.com
 
         () Art:
@@ -81,3 +83,10 @@ ATTRIBUTIONS
                 - Picking up health sound: https://pixabay.com/sound-effects/healpop-46004/
                 - Bow and Arrow release and shoot sound: https://freesound.org/people/PoundSoundUK/sounds/717823/
                 - Nezha spinning spear sound: https://pixabay.com/sound-effects/rotate-movement-whoosh-1-185335/
+
+        () Figma:
+                - Image Tracer by Dave Williames 
+                - Shaper by Anna Voshkarina 
+
+        () Color Pallete
+                - By matt: https://lospec.com/palette-list/31
